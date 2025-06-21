@@ -52,6 +52,8 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import MyTasks from './pages/MyTasks';
+import AssignedTasks from './pages/AssignedTasks';
 import CreateTask from './pages/CreateTask';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -97,6 +99,8 @@ function App() {
           <Route path="/login" element={<Login baseUrl={baseUrl} />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard baseUrl={baseUrl}/></ProtectedRoute>} />
           <Route path="/tasks/create" element={<ProtectedRoute><CreateTask baseUrl={baseUrl}/></ProtectedRoute>} />
+          <Route path="/tasks/my-tasks" element={<ProtectedRoute><MyTasks baseUrl={baseUrl} /></ProtectedRoute>} />
+          <Route path="/tasks/assigned-by-me" element={<ProtectedRoute><AssignedTasks baseUrl={baseUrl} /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
