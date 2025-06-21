@@ -55,6 +55,8 @@ import Dashboard from './pages/Dashboard';
 import MyTasks from './pages/MyTasks';
 import AssignedTasks from './pages/AssignedTasks';
 import CreateTask from './pages/CreateTask';
+import UpdateTask from './pages/UpdateTask';
+import TaskProgress from './pages/TaskProgress';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from 'react';
@@ -97,10 +99,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup baseUrl={baseUrl} />} />
           <Route path="/login" element={<Login baseUrl={baseUrl} />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard baseUrl={baseUrl}/></ProtectedRoute>} />
-          <Route path="/tasks/create" element={<ProtectedRoute><CreateTask baseUrl={baseUrl}/></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard baseUrl={baseUrl} /></ProtectedRoute>} />
+          <Route path="/tasks/create" element={<ProtectedRoute><CreateTask baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/my-tasks" element={<ProtectedRoute><MyTasks baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/assigned-by-me" element={<ProtectedRoute><AssignedTasks baseUrl={baseUrl} /></ProtectedRoute>} />
+          <Route path="/tasks/:taskId/update" element={<ProtectedRoute><UpdateTask baseUrl={baseUrl} /></ProtectedRoute>} />
+          <Route path="/tasks/:taskId/progress" element={<ProtectedRoute><TaskProgress baseUrl={baseUrl} /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

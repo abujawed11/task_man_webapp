@@ -85,7 +85,7 @@ function MyTasks({ baseUrl }) {
                                 {/* <div className="bg-yellow-100 p-4 border-b border-yellow-500">
                                     <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
                                 </div> */}
-                                <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
+                                {/* <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
                                     <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
                                     <div className="flex space-x-2">
                                         <button
@@ -102,6 +102,26 @@ function MyTasks({ baseUrl }) {
                                             Update
                                         </button>
 
+                                    </div>
+                                </div> */}
+
+                                <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
+                                    <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
+
+                                    <div className="flex space-x-2">
+                                        <button
+                                            onClick={() => navigate(`/tasks/${task.id}/progress`)}
+                                            className="cursor-pointer text-xs bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-800 transition"
+                                        >
+                                            View Progress
+                                        </button>
+
+                                        <button
+                                            onClick={() => navigate(`/tasks/${task.id}/update`)}
+                                            className="cursor-pointer text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition"
+                                        >
+                                            Update
+                                        </button>
                                     </div>
                                 </div>
 

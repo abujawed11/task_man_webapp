@@ -97,8 +97,27 @@ function AssignedTasks({ baseUrl }) {
                                 className="bg-white border border-yellow-500 rounded-lg shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 transition transform duration-300"
                             >
                                 {/* Title */}
-                                <div className="bg-yellow-100 p-4 border-b border-yellow-500">
+                                {/* <div className="bg-yellow-100 p-4 border-b border-yellow-500">
                                     <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
+                                </div> */}
+                                                                <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
+                                    <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
+
+                                    <div className="flex space-x-2">
+                                        <button
+                                            onClick={() => navigate(`/tasks/${task.id}/progress`)}
+                                            className="cursor-pointer text-xs bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-800 transition"
+                                        >
+                                            View Progress
+                                        </button>
+
+                                        <button
+                                            onClick={() => navigate(`/tasks/${task.id}/update`)}
+                                            className="cursor-pointer text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition"
+                                        >
+                                            Update
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Content */}
