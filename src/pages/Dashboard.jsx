@@ -100,7 +100,7 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/24/solid';
 
-function Dashboard({baseUrl}) {
+function Dashboard({ baseUrl }) {
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({
     assignedToMe: 0,
@@ -117,6 +117,7 @@ function Dashboard({baseUrl}) {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
         const response = await axios.get(`${baseUrl}/api/tasks/dashboard`, { headers });
+        console.log(response)
         setStats(response.data.stats);
       } catch (error) {
         toast.error('Failed to load dashboard data');
@@ -149,7 +150,7 @@ function Dashboard({baseUrl}) {
         <section className="mb-8">
           <h2 className="text-2xl font-bold text-black mb-4">Task Summary</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105">
+            {/* <div className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105">
               <div className="flex items-center">
                 <UserIcon className="h-8 w-8 text-yellow-500 mr-4" />
                 <div>
@@ -157,8 +158,17 @@ function Dashboard({baseUrl}) {
                   <p className="text-2xl text-black">{stats.assignedToMe}</p>
                 </div>
               </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105">
+            </div> */}
+            <NavLink to="/tasks/my-tasks" className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105 block">
+              <div className="flex items-center">
+                <UserIcon className="h-8 w-8 text-yellow-500 mr-4" />
+                <div>
+                  <p className="text-lg font-semibold text-black">Tasks Assigned to Me</p>
+                  <p className="text-2xl text-black">{stats.assignedToMe}</p>
+                </div>
+              </div>
+            </NavLink>
+            {/* <div className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105">
               <div className="flex items-center">
                 <PaperAirplaneIcon className="h-8 w-8 text-yellow-500 mr-4" />
                 <div>
@@ -166,7 +176,16 @@ function Dashboard({baseUrl}) {
                   <p className="text-2xl text-black">{stats.assignedByMe}</p>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <NavLink to="/tasks/assigned-by-me" className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105 block">
+              <div className="flex items-center">
+                <PaperAirplaneIcon className="h-8 w-8 text-yellow-500 mr-4" />
+                <div>
+                  <p className="text-lg font-semibold text-black">Tasks I Assigned</p>
+                  <p className="text-2xl text-black">{stats.assignedByMe}</p>
+                </div>
+              </div>
+            </NavLink>
             <div className="bg-white p-4 rounded-lg shadow-md hover:bg-yellow-50 transition hover:scale-105">
               <div className="flex items-center">
                 <ClockIcon className="h-8 w-8 text-yellow-500 mr-4" />

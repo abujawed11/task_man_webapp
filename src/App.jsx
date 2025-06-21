@@ -96,7 +96,7 @@ function App() {
           <Route path="/signup" element={<Signup baseUrl={baseUrl} />} />
           <Route path="/login" element={<Login baseUrl={baseUrl} />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard baseUrl={baseUrl}/></ProtectedRoute>} />
-          <Route path="/tasks/create" element={<ProtectedRoute><CreateTask /></ProtectedRoute>} />
+          <Route path="/tasks/create" element={<ProtectedRoute><CreateTask baseUrl={baseUrl}/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -5,15 +5,23 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { MicrophoneIcon, PaperClipIcon } from '@heroicons/react/24/solid';
 
-function CreateTask() {
-  const { user, baseUrl, loading } = useContext(AuthContext);
+function CreateTask({ baseUrl }) {
+  const { user, loading } = useContext(AuthContext);
+  //console.log('👤 Logged-in user:', user); // ✅ Add this here
   const navigate = useNavigate();
+  // const [formData, setFormData] = useState({
+  //   title: '',
+  //   description: '',
+  //   priority: '',
+  //   status: '',
+  //   assigned_to: '',
+  // });
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    priority: 'Medium',
-    status: 'Pending',
+    priority: '',
     assigned_to: '',
+    due_date: '',
   });
   const [users, setUsers] = useState([]);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -44,26 +52,29 @@ function CreateTask() {
   // }, [user, loading, baseUrl]);
 
   useEffect(() => {
-  const fetchUsers = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No token found');
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('No token found');
 
-      const response = await axios.get(`${baseUrl}/api/users/list`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      console.log('Fetched users:', response.data); // 👈 check shape here
-      setUsers(Array.isArray(response.data) ? response.data : response.data.users);
-      
-    } catch (error) {
-      toast.error('Failed to load users');
-      console.error('Fetch users error:', error);
-    }
-  };
+        // console.log(response.data)
 
-  if (user && !loading) fetchUsers();
-}, [user, loading, baseUrl]);
+        //console.log('Fetched users:', response.data); // 👈 check shape here
+        // setUsers(Array.isArray(response.data) ? response.data : response.data.users);
+        setUsers(response.data);
+
+      } catch (error) {
+        toast.error('Failed to load users');
+        console.error('Fetch users error:', error);
+      }
+    };
+
+    if (user && !loading) fetchUsers();
+  }, []);
 
 
   // Handle audio recording
@@ -139,8 +150,9 @@ function CreateTask() {
       data.append('title', formData.title);
       data.append('description', formData.description);
       data.append('priority', formData.priority);
-      data.append('status', formData.status);
       data.append('assigned_to', formData.assigned_to);
+      data.append('due_date', formData.due_date);
+      //data.append('status', 'Pending'); // ✅ hardcoded
       if (audioBlob) data.append('audio', audioBlob, `audio-note.${audioBlob.type.split('/')[1]}`);
       if (file) data.append('file', file);
 
@@ -155,8 +167,8 @@ function CreateTask() {
       setFormData({
         title: '',
         description: '',
-        priority: 'Medium',
-        status: 'Pending',
+        priority: '',
+        //status: 'Pending',
         assigned_to: '',
       });
       setAudioBlob(null);
@@ -227,13 +239,14 @@ function CreateTask() {
               onChange={handleInputChange}
               disabled={isSubmitting}
             >
+              <option value="" hidden>Select Priority</option>
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>
           </div>
 
-          {/* Status */}
+          {/* Status
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-black">
               Status
@@ -250,6 +263,23 @@ function CreateTask() {
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
+          </div> */}
+
+          {/* Due Date */}
+          <div>
+            <label htmlFor="due_date" className="block text-sm font-medium text-black">
+              Due Date
+            </label>
+            <input
+              id="due_date"
+              name="due_date"
+              type="date"
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+              value={formData.due_date}
+              onChange={handleInputChange}
+              disabled={isSubmitting}
+            />
           </div>
 
           {/* Assigned To */}
@@ -266,12 +296,24 @@ function CreateTask() {
               onChange={handleInputChange}
               disabled={isSubmitting}
             >
-              <option value="">Select User</option>
-              {users.map((u) => (
+              <option value="" hidden>Select User to Assign</option>
+              {users && users.map((username, index) => (
+                <option key={index} value={username}>
+                  {username}
+                </option>
+              ))}
+              {/* <option value="">Select User</option>
+              {users && users.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.username}
                 </option>
-              ))}
+              ))} */}
+              {/* {users && users.filter((u) => u.id !== user.id) // ✅ filter out current user
+                .map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.username}
+                  </option>
+                ))} */}
             </select>
           </div>
 
@@ -284,9 +326,8 @@ function CreateTask() {
               <button
                 type="button"
                 onClick={isRecording ? stopRecording : startRecording}
-                className={`flex items-center px-4 py-2 rounded-md text-white ${
-                  isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-gray-800'
-                } transition disabled:bg-gray-600 sm:text-sm`}
+                className={`flex items-center px-4 py-2 rounded-md text-white ${isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-gray-800'
+                  } transition disabled:bg-gray-600 sm:text-sm`}
                 disabled={isSubmitting}
               >
                 <MicrophoneIcon className="h-5 w-5 mr-2" />
