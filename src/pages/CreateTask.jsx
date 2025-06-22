@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { MicrophoneIcon, PaperClipIcon } from '@heroicons/react/24/solid';
+import { MicrophoneIcon, PaperClipIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
+
 
 function CreateTask({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
@@ -188,6 +189,13 @@ function CreateTask({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <button
+        onClick={() => navigate('/dashboard')}
+        className="flex items-center text-black hover:text-gray-700 mb-4"
+      >
+        <ArrowLeftIcon className="h-5 w-5 mr-1" />
+        Back to Dashboard
+      </button>
       <div className="max-w-3xl mx-auto">
         <h2 className="text-3xl font-bold text-black mb-6 text-center">Create New Task</h2>
         <form onSubmit={handleSubmit} className="space-y-6 bg-yellow-100 p-8 rounded-lg shadow-md">
