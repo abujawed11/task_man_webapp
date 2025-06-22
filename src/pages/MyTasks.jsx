@@ -235,7 +235,9 @@ function MyTasks({ baseUrl }) {
                                                         />
                                                         <a
                                                             href={`${baseUrl}/${task.file_path}`}
-                                                            download
+                                                            // download
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
                                                             className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
                                                         >
                                                             Download
@@ -244,7 +246,9 @@ function MyTasks({ baseUrl }) {
                                                 ) : (
                                                     <a
                                                         href={`${baseUrl}/${task.file_path}`}
-                                                        download
+                                                        // download
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
                                                         className="flex items-center text-yellow-500 hover:text-yellow-600 text-sm"
                                                     >
                                                         <DocumentArrowDownIcon className="h-5 w-5 mr-2" />

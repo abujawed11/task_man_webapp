@@ -109,6 +109,17 @@ function Dashboard({ baseUrl }) {
     inProgress: 0,
     completed: 0,
   });
+
+  // const [stats, setStats] = useState({
+  //   assignedToMe: 0,
+  //   assignedByMe: 0
+  // });
+  // const [other, setOther] = useState({
+  //   pending: "0",
+  //   inProgress: "0",
+  //   completed: "0"
+
+  // })
   // const baseUrl = 'http://localhost:5000';
 
   useEffect(() => {
@@ -117,8 +128,12 @@ function Dashboard({ baseUrl }) {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
         const response = await axios.get(`${baseUrl}/api/tasks/dashboard`, { headers });
-        console.log(response)
+        
+        // setOther(response.data.stats[0])
         setStats(response.data.stats);
+        // console.log("1",response.data.stats)
+        // console.log("2",response.data.stats[0])
+        // console.log("3",other)
       } catch (error) {
         toast.error('Failed to load dashboard data');
         console.error('Dashboard error:', error);
