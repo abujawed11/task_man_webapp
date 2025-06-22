@@ -93,26 +93,27 @@ function AssignedTasks({ baseUrl }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {tasks.map((task) => (
                             <div
-                                key={task.id}
+                                key={task.task_id}
                                 className="bg-white border border-yellow-500 rounded-lg shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 transition transform duration-300"
                             >
                                 {/* Title */}
                                 {/* <div className="bg-yellow-100 p-4 border-b border-yellow-500">
                                     <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
                                 </div> */}
-                                                                <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
+                                <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
                                     <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
 
                                     <div className="flex space-x-2">
                                         <button
-                                            onClick={() => navigate(`/tasks/${task.id}/progress`)}
+                                            onClick={() => navigate(`/tasks/${task.task_id}/progress`)}
                                             className="cursor-pointer text-xs bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-800 transition"
                                         >
                                             View Progress
                                         </button>
 
                                         <button
-                                            onClick={() => navigate(`/tasks/${task.id}/update`)}
+                                            onClick={() => navigate(`/tasks/${task.task_id}/update`, { state: { from: 'assignedTasks' } })}
+                                            
                                             className="cursor-pointer text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition"
                                         >
                                             Update
@@ -125,16 +126,16 @@ function AssignedTasks({ baseUrl }) {
                                     {/* Description */}
                                     <div>
                                         <p className="text-black text-sm">
-                                            {expandedDescriptions[task.id] || task.description?.length <= 100
+                                            {expandedDescriptions[task.task_id] || task.description?.length <= 100
                                                 ? task.description || 'No description'
                                                 : `${task.description.slice(0, 100)}...`}
                                         </p>
                                         {task.description?.length > 100 && (
                                             <button
-                                                onClick={() => toggleDescription(task.id)}
+                                                onClick={() => toggleDescription(task.task_id)}
                                                 className="text-yellow-500 hover:text-yellow-600 text-sm font-medium"
                                             >
-                                                {expandedDescriptions[task.id] ? 'Read Less' : 'Read More'}
+                                                {expandedDescriptions[task.task_id] ? 'Read Less' : 'Read More'}
                                             </button>
                                         )}
                                     </div>
@@ -173,7 +174,7 @@ function AssignedTasks({ baseUrl }) {
                                         </span>
                                     </div>
 
-                            
+
                                     {/* Assigned To */}
                                     <div className="flex items-center">
                                         <UserIcon className="h-5 w-5 text-gray-500 mr-2" />

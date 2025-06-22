@@ -159,6 +159,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
 import { MicrophoneIcon, PaperClipIcon } from '@heroicons/react/24/solid';
+import { useLocation } from 'react-router-dom';
+
+
+
 
 function UpdateTask({ baseUrl }) {
     const { user } = useContext(AuthContext);
@@ -168,6 +172,7 @@ function UpdateTask({ baseUrl }) {
     const [task, setTask] = useState(null);
     const [status, setStatus] = useState('');
     const [title, setTitle] = useState('');
+    const [assignedTo, setAssignedTo] = useState('')
     const [description, setDescription] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [priority, setPriority] = useState('Medium');
@@ -177,6 +182,9 @@ function UpdateTask({ baseUrl }) {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [recordingTime, setRecordingTime] = useState(0);
     const [recordingInterval, setRecordingInterval] = useState(null);
+    const [users, setUsers] = useState([]);
+    const location = useLocation();
+    const from = location.state?.from || 'dashboard'; // fallback
 
     const fetchTask = async () => {
         try {
@@ -184,19 +192,38 @@ function UpdateTask({ baseUrl }) {
             const res = await axios.get(`${baseUrl}/api/tasks/${taskId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            console.log(res.data)
             setTask(res.data);
             setStatus(res.data.status);
             setTitle(res.data.title);
             setDescription(res.data.description);
             setDueDate(res.data.due_date?.split('T')[0] || '');
             setPriority(res.data.priority);
+            setAssignedTo(res.data.assigned_to)
         } catch (error) {
             toast.error('Failed to fetch task');
         }
     };
 
+    const fetchUsers = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUsers(response.data);
+
+        } catch (error) {
+            toast.error('Failed to load users');
+            console.error('Fetch users error:', error);
+        }
+    };
+
     useEffect(() => {
         fetchTask();
+        fetchUsers();
     }, [taskId]);
 
     const startRecording = async () => {
@@ -241,13 +268,14 @@ function UpdateTask({ baseUrl }) {
             const token = localStorage.getItem('token');
             const formData = new FormData();
             formData.append('status', status);
+            formData.append('comment', comment); // ✅ always append comment
 
             if (user?.username === task?.created_by) {
                 formData.append('title', title);
                 formData.append('description', description);
                 formData.append('due_date', dueDate);
                 formData.append('priority', priority);
-                formData.append('comment', comment);
+                formData.append('assigned_to', assignedTo);
             }
             if (audioBlob) formData.append('audio', audioBlob);
             if (file) formData.append('file', file);
@@ -273,6 +301,20 @@ function UpdateTask({ baseUrl }) {
     return (
         <div className="max-w-2xl mx-auto mt-10 p-6 bg-white border border-gray-300 rounded-lg shadow">
             <h2 className="text-xl font-semibold text-black mb-4">Update Task</h2>
+            <button
+                type="button"
+                onClick={() => {
+                    if (from === 'myTasks') navigate('/tasks/my-tasks');
+                    else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
+                    else navigate('/dashboard');
+                }}
+                className="flex items-center text-gray-600 hover:text-black mb-4"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </button>
             <form onSubmit={handleSubmit} className="space-y-4">
                 {isCreator && (
                     <>
@@ -313,6 +355,21 @@ function UpdateTask({ baseUrl }) {
                                 <option>High</option>
                             </select>
                         </div>
+                        <div>
+                            <label className="text-black block">Assigned To</label>
+                            <select
+                                className="w-full border px-3 py-2 rounded"
+                                value={assignedTo}
+                                onChange={(e) => setAssignedTo(e.target.value)}
+                            >
+
+                                {users && users.map((username, index) => (
+                                    <option key={index} value={username}>
+                                        {username}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </>
                 )}
 
@@ -328,15 +385,17 @@ function UpdateTask({ baseUrl }) {
                             <option>In Progress</option>
                             <option>Completed</option>
                         </select>
+                        <label className="text-black block">Comment</label>
+                        <textarea
+                            className="w-full border px-3 py-2 rounded"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
                     </div>
+
                 )}
 
-                <label className="text-black block">Comment</label>
-                <textarea
-                    className="w-full border px-3 py-2 rounded"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                ></textarea>
+
 
                 {/* Audio Notes */}
                 <div>

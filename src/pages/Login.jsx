@@ -147,7 +147,7 @@
 
 // export default Login;
 
-import { useState, useContext,  useRef, useEffect } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
@@ -216,8 +216,17 @@ function Login({ baseUrl }) {
         username: formData.username,
         password: formData.password,
       });
-      console.log(response)
+      const u = response.data.user;
+      console.log("user data",u)
       login(response.data.user, response.data.token);
+      // login({
+      //   id: u.user_id,                        // ✅ what your app expects now
+      //   username: u.username,
+      //   email: u.email,
+      //   phoneNumber: u.phone_number,          // ✅ convert to camelCase
+      //   role: u.role,
+      //   accountType: u.accountType || u.account_type, // 👈 safe fallback
+      // }, response.data.token);
       toast.success('Login successful!');
       navigate('/dashboard');
 
