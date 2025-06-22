@@ -385,16 +385,22 @@ function UpdateTask({ baseUrl }) {
                             <option>In Progress</option>
                             <option>Completed</option>
                         </select>
-                        <label className="text-black block">Comment</label>
+                        {/* <label className="text-black block">Comment</label>
                         <textarea
                             className="w-full border px-3 py-2 rounded"
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
-                        ></textarea>
+                        ></textarea> */}
                     </div>
 
                 )}
 
+                <label className="text-black block">Comment</label>
+                <textarea
+                    className="w-full border px-3 py-2 rounded"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                ></textarea>
 
 
                 {/* Audio Notes */}
