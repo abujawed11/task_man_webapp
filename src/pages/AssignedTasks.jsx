@@ -93,7 +93,9 @@ function AssignedTasks({ baseUrl }) {
                 <ArrowLeftIcon className="h-5 w-5 mr-1" />
                 Back to Dashboard
             </button>
+            <h1 className="text-3xl text-center font-bold text-black mb-2">Assigend Task Page</h1>
             <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+
                 <div className="max-w-7xl mx-auto">
 
                     {tasks.length === 0 ? (
@@ -221,7 +223,9 @@ function AssignedTasks({ baseUrl }) {
                                                         />
                                                         <a
                                                             href={`${baseUrl}/${task.file_path}`}
-                                                            download
+                                                            // download
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
                                                             className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
                                                         >
                                                             Download
@@ -230,7 +234,9 @@ function AssignedTasks({ baseUrl }) {
                                                 ) : (
                                                     <a
                                                         href={`${baseUrl}/${task.file_path}`}
-                                                        download
+                                                        // download
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
                                                         className="flex items-center text-yellow-500 hover:text-yellow-600 text-sm"
                                                     >
                                                         <DocumentArrowDownIcon className="h-5 w-5 mr-2" />

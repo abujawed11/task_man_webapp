@@ -57,6 +57,7 @@ import AssignedTasks from './pages/AssignedTasks';
 import CreateTask from './pages/CreateTask';
 import UpdateTask from './pages/UpdateTask';
 import TaskProgress from './pages/TaskProgress';
+import AllTasks from './pages/AllTasks';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from 'react';
@@ -105,6 +106,7 @@ function App() {
           <Route path="/tasks/assigned-by-me" element={<ProtectedRoute><AssignedTasks baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/:taskId/update" element={<ProtectedRoute><UpdateTask baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/:taskId/progress" element={<ProtectedRoute><TaskProgress baseUrl={baseUrl} /></ProtectedRoute>} />
+          <Route path="/admin/tasks/all" element={<ProtectedRoute><AllTasks baseUrl={baseUrl}/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

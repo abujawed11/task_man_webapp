@@ -858,7 +858,7 @@ function Signup({ baseUrl = 'http://localhost:5000' }) {
                 {[ 'Software Developer', 'UI/UX Designer', 'Product Designer',
                    'Marketing Specialist', 'Content Writer', 'Project Manager',
                    'Business Analyst', 'Quality Assurance', 'DevOps Engineer',
-                   'Data Analyst', 'Digital Marketing', 'Sales Executive', 'HR Professional'
+                   'Data Analyst', 'Digital Marketing', 'Sales Executive', 'HR Professional', 'Founder', 'Co-Founder'
                 ].map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
               <label className={labelClass}>Role</label>
@@ -893,7 +893,7 @@ function Signup({ baseUrl = 'http://localhost:5000' }) {
                   type="text"
                   value={inviteCode}
                   onChange={(e) => setInviteCode(e.target.value)}
-                  placeholder="Invite Code"
+                  placeholder="Super-Admin Invite Code"
                   className={inputClass('inviteCode')}
                 />
                 <label className={labelClass}>Invite Code</label>

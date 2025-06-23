@@ -454,6 +454,7 @@ function TaskProgress({ baseUrl }) {
           onClick={() => {
             if (from === 'myTasks') navigate('/tasks/my-tasks');
             else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
+            else if (from === 'adminTasks') navigate('/admin/tasks/all');
             else navigate('/dashboard');
           }}
           className="flex items-center text-black hover:text-yellow-500 mb-6 transition sm:text-sm"

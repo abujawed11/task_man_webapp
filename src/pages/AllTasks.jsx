@@ -1,0 +1,497 @@
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import {
+  FireIcon,
+  SparklesIcon,
+  ClockIcon,
+  PlayIcon,
+  CheckCircleIcon,
+  CalendarIcon,
+  UserIcon,
+  DocumentArrowDownIcon,
+  MusicalNoteIcon,
+  FunnelIcon,
+} from '@heroicons/react/24/solid';
+
+function AllTasks({ baseUrl }) {
+  const { user, loading } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+  // const [filters, setFilters] = useState({
+  //   assigned_to: '',
+  //   created_by: '',
+  //   status: '',
+  //   priority: '',
+  //   due_date_start: '',
+  //   due_date_end: '',
+  //   created_at_start: '',
+  //   created_at_end: '',
+  // });
+  const [filters, setFilters] = useState({
+    assigned_to: '',
+    created_by: '',
+    status: '',
+    priority: '',
+    due_date: '',         // ⬅️ single field now
+    created_at: '',       // ⬅️ single field now
+  });
+
+  // Fetch tasks and users
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        // Fetch all tasks
+        const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTasks(tasksResponse.data);
+        setFilteredTasks(tasksResponse.data);
+        // console.log(tasksResponse.data[0])
+        // console.log("filter:---->",filteredTasks)
+
+        // Fetch users for filters
+        const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(usersResponse.data);
+      } catch (error) {
+        toast.error('Failed to load data');
+        console.error('Fetch data error:', error);
+      }
+    };
+    if (user && !loading && user.accountType === 'Super Admin') fetchData();
+    else if (!loading) {
+      toast.error('Access denied');
+      navigate('/dashboard');
+    }
+  }, [user, loading, baseUrl, navigate]);
+
+  // Apply filters
+
+  useEffect(() => {
+    let filtered = tasks;
+
+    if (filters.assigned_to) {
+      filtered = filtered.filter((task) => task.assigned_to === filters.assigned_to);
+    }
+
+    if (filters.created_by) {
+      filtered = filtered.filter((task) => task.created_by === filters.created_by);
+    }
+
+    if (filters.status) {
+      filtered = filtered.filter((task) => task.status === filters.status);
+    }
+
+    if (filters.priority) {
+      filtered = filtered.filter((task) => task.priority === filters.priority);
+    }
+
+    // if (filters.due_date) {
+    //   filtered = filtered.filter((task) => task.due_date?.slice(0, 10) === filters.due_date);
+    // }
+    // if (filters.due_date) {
+
+
+    //   filtered = filtered.filter((task) => {
+    //     console.log('Comparing:', {
+    //       fromDB: new Date(task.due_date).toISOString().slice(0, 10),
+    //       fromFilter: filters.due_date,
+    //     });
+    //     const dueDateStr = new Date(task.due_date).toISOString().slice(0, 10);
+    //     return dueDateStr === filters.due_date;
+    //   });
+    // }
+
+    if (filters.due_date) {
+      filtered = filtered.filter(
+        (task) =>
+          new Date(task.due_date).toLocaleDateString('en-CA') === filters.due_date
+      );
+    }
+
+    if (filters.created_at) {
+      filtered = filtered.filter((task) => task.created_at?.slice(0, 10) === filters.created_at);
+    }
+
+    setFilteredTasks(filtered);
+  }, [filters, tasks]);
+
+  // useEffect(() => {
+  //   let filtered = tasks;
+  //   if (filters.assigned_to) {
+  //     filtered = filtered.filter((task) => task.assigned_to === filters.assigned_to);
+  //   }
+  //   if (filters.created_by) {
+  //     filtered = filtered.filter((task) => task.created_by === filters.created_by);
+  //   }
+  //   if (filters.status) {
+  //     filtered = filtered.filter((task) => task.status === filters.status);
+  //   }
+  //   if (filters.priority) {
+  //     filtered = filtered.filter((task) => task.priority === filters.priority);
+  //   }
+  //   if (filters.due_date_start) {
+  //     filtered = filtered.filter((task) => task.due_date >= filters.due_date_start);
+  //   }
+  //   if (filters.due_date_end) {
+  //     filtered = filtered.filter((task) => task.due_date <= filters.due_date_end);
+  //   }
+  //   if (filters.created_at_start) {
+  //     filtered = filtered.filter((task) => task.created_at >= filters.created_at_start);
+  //   }
+  //   if (filters.created_at_end) {
+  //     filtered = filtered.filter((task) => task.created_at <= filters.created_at_end);
+  //   }
+  //   setFilteredTasks(filtered);
+  // }, [filters, tasks]);
+
+  // Handle filter change
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Toggle description
+  const toggleDescription = (taskId) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [taskId]: !prev[taskId],
+    }));
+  };
+
+  // Format date
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  // Check if overdue
+  const isOverdue = (dueDate) => {
+    if (!dueDate) return false;
+    return new Date(dueDate) < new Date();
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  if (loading) {
+    return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading...</div>;
+  }
+
+  return (
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        {/* <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-black">All Tasks</h2>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition sm:text-sm"
+          >
+            Logout
+          </button>
+        </div> */}
+
+        {/* Filters */}
+        <div className="bg-white border border-yellow-500 rounded-lg shadow-md p-6 mb-8">
+          <div className="flex items-center mb-4">
+            <FunnelIcon className="h-6 w-6 text-yellow-500 mr-2" />
+            <h3 className="text-lg font-semibold text-black">Filter Tasks</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Assigned To</label>
+              <select
+                name="assigned_to"
+                value={filters.assigned_to}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              >
+                <option value="">All</option>
+                {users.map((u) => (
+                  <option key={u.username} value={u.username}>{u.username}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Created By</label>
+              <select
+                name="created_by"
+                value={filters.created_by}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              >
+                <option value="">All</option>
+                {users.map((u) => (
+                  <option key={u.username} value={u.username}>{u.username}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Status</label>
+              <select
+                name="status"
+                value={filters.status}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              >
+                <option value="">All</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Priority</label>
+              <select
+                name="priority"
+                value={filters.priority}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              >
+                <option value="">All</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+
+
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Due Date</label>
+              <input
+                type="date"
+                name="due_date"
+                value={filters.due_date}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Created Date</label>
+              <input
+                type="date"
+                name="created_at"
+                value={filters.created_at}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+
+            {/* <div>
+              <label className="block text-sm font-medium text-black mb-1">Due Date Start</label>
+              <input
+                type="date"
+                name="due_date_start"
+                value={filters.due_date_start}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Due Date End</label>
+              <input
+                type="date"
+                name="due_date_end"
+                value={filters.due_date_end}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Created Date Start</label>
+              <input
+                type="date"
+                name="created_at_start"
+                value={filters.created_at_start}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Created Date End</label>
+              <input
+                type="date"
+                name="created_at_end"
+                value={filters.created_at_end}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div> */}
+          </div>
+        </div>
+
+        {/* Tasks */}
+        {filteredTasks.length === 0 ? (
+          <div className="text-center text-black text-lg">
+            <DocumentArrowDownIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
+            <p>No tasks found.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTasks.map((task) => (
+              <div
+                key={task.id}
+                className="bg-white border border-yellow-500 rounded-lg shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 transition transform duration-300"
+              >
+
+                {/* <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-start">
+                  <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
+
+                  <div className="flex space-x-2"> */}
+
+                {/* </div>
+                </div> */}
+
+
+
+                <div className="bg-yellow-100 p-4 border-b border-yellow-500">
+                  <h3 className="text-xl font-semibold text-black truncate">{task.title}</h3>
+
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => navigate(`/tasks/${task.task_id}/progress`, { state: { from: 'adminTasks' } })}
+                      className="cursor-pointer text-xs bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-800 transition"
+                    >
+                      View Progress
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(`/tasks/${task.task_id}/update`, { state: { from: 'adminTasks' } })
+                      }
+                      className="cursor-pointer text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition"
+                    >
+                      Update
+                    </button>
+                  </div>
+
+
+                </div>
+                <div className="p-4 space-y-3">
+                  <p className="text-black text-sm">
+                    {expandedDescriptions[task.id] || task.description?.length <= 100
+                      ? task.description || 'No description'
+                      : `${task.description.slice(0, 100)}...`}
+                  </p>
+                  {task.description?.length > 100 && (
+                    <button
+                      onClick={() => toggleDescription(task.id)}
+                      className="text-yellow-500 hover:text-yellow-600 text-sm font-medium"
+                    >
+                      {expandedDescriptions[task.id] ? 'Read Less' : 'Read More'}
+                    </button>
+                  )}
+                  <div className="flex items-center">
+                    {task.priority === 'High' && <FireIcon className="h-5 w-5 text-red-500 mr-2" />}
+                    {task.priority === 'Medium' && <FireIcon className="h-5 w-5 text-yellow-500 mr-2" />}
+                    {task.priority === 'Low' && <SparklesIcon className="h-5 w-5 text-blue-500 mr-2" />}
+                    <span className="text-black text-sm">Priority: {task.priority}</span>
+                  </div>
+                  <div className="flex items-center">
+                    {task.status === 'Pending' && <ClockIcon className="h-5 w-5 text-gray-500 mr-2" />}
+                    {task.status === 'In Progress' && <PlayIcon className="h-5 w-5 text-blue-500 mr-2" />}
+                    {task.status === 'Completed' && <CheckCircleIcon className="h-5 w-5 text-green-500 mr-2" />}
+                    <span className="text-black text-sm">Status: {task.status}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CalendarIcon className="h-5 w-5 text-gray-500 mr-2" />
+                    <span className="text-black text-sm">Created: {formatDate(task.created_at)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CalendarIcon className="h-5 w-5 text-gray-500 mr-2" />
+                    <span
+                      className={`text-sm ${isOverdue(task.due_date) ? 'text-red-600 font-semibold' : 'text-black'
+                        }`}
+                    >
+                      Due: {formatDate(task.due_date)}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                    <span className="text-black text-sm">Assigned To: {task.assigned_to}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                    <span className="text-black text-sm">Created By: {task.created_by}</span>
+                  </div>
+                  {/* <NavLink
+                    to={`/tasks/${task.id}/progress`}
+                    state={{ from: 'allTasks' }}
+                    className="inline-block mt-2 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition text-sm"
+                  >
+                    View Progress
+                  </NavLink> */}
+                  {task.audio_path && (
+                    <div className="mt-4">
+                      <div className="flex items-center mb-2">
+                        <MusicalNoteIcon className="h-5 w-5 text-yellow-500 mr-2" />
+                        <span className="text-black text-sm">Audio Note</span>
+                      </div>
+                      <audio
+                        controls
+                        src={`${baseUrl}/${task.audio_path}`}
+                        className="w-full max-w-xs"
+                      />
+                    </div>
+                  )}
+                  {task.file_path && (
+                    <div className="mt-4">
+                      <div className="flex items-center mb-2">
+                        <DocumentArrowDownIcon className="h-5 w-5 text-yellow-500 mr-2" />
+                        <span className="text-black text-sm">Attached File</span>
+                      </div>
+                      {task.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
+                        <div className="relative">
+                          <img
+                            src={`${baseUrl}/${task.file_path}`}
+                            alt="Task attachment"
+                            className="max-w-full h-40 object-cover rounded-md"
+                          />
+                          <a
+                            href={`${baseUrl}/${task.file_path}`}
+                            download
+                            className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
+                          >
+                            Download
+                          </a>
+                        </div>
+                      ) : (
+                        <a
+                          href={`${baseUrl}/${task.file_path}`}
+                          download
+                          className="flex items-center text-yellow-500 hover:text-yellow-600 text-sm"
+                        >
+                          <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+                          Download {task.file_path.split('/').pop()}
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default AllTasks;

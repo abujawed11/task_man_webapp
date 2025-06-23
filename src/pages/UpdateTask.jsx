@@ -296,7 +296,7 @@ function UpdateTask({ baseUrl }) {
     if (!task) return <div className="text-center mt-10 text-black">Loading task...</div>;
 
     const isCreator = user?.username === task.created_by;
-    const isAssignee = user?.username === task.assigned_to;
+    const isAssignee = (user?.username === task.assigned_to) || (user?.account_type === "Super Admin");
 
     return (
         <div className="max-w-2xl mx-auto mt-10 p-6 bg-white border border-gray-300 rounded-lg shadow">
@@ -306,6 +306,7 @@ function UpdateTask({ baseUrl }) {
                 onClick={() => {
                     if (from === 'myTasks') navigate('/tasks/my-tasks');
                     else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
+                    else if (from === 'adminTasks') navigate('/admin/tasks/all');
                     else navigate('/dashboard');
                 }}
                 className="flex items-center text-gray-600 hover:text-black mb-4"
