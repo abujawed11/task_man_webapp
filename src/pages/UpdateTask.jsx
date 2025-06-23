@@ -295,8 +295,11 @@ function UpdateTask({ baseUrl }) {
 
     if (!task) return <div className="text-center mt-10 text-black">Loading task...</div>;
 
-    const isCreator = user?.username === task.created_by;
-    const isAssignee = (user?.username === task.assigned_to) || (user?.account_type === "Super Admin");
+    const isCreator = (user?.username === task.created_by) && (user?.accountType !== "Super Admin");
+    const isAssignee = (user?.username === task.assigned_to) || (user?.accountType === "Super Admin");
+    console.log(user)
+    // console.log(isAssignee)
+    // console.log(isCreator)
 
     return (
         <div className="max-w-2xl mx-auto mt-10 p-6 bg-white border border-gray-300 rounded-lg shadow">

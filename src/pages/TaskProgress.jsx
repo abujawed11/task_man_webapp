@@ -373,6 +373,161 @@
 // export default TaskProgress;
 
 
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import { useParams, useLocation, useNavigate } from 'react-router-dom';
+// import {
+//   ArrowLeftIcon,
+//   UserIcon,
+//   CalendarIcon,
+//   FireIcon,
+//   ClockIcon,
+//   CheckCircleIcon,
+//   DocumentIcon,
+// } from '@heroicons/react/24/solid';
+// import TaskUpdateCard from '../components/TaskUpdateCard';
+
+// function TaskProgress({ baseUrl }) {
+//   const { taskId } = useParams();
+//   const [updates, setUpdates] = useState([]);
+//   const [task, setTask] = useState(null);
+//   const location = useLocation();
+//   const from = location.state?.from || 'dashboard';
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchUpdates = async () => {
+//       const token = localStorage.getItem('token');
+//       try {
+//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setUpdates(res.data.updates || []);
+//         setTask(res.data.task || null);
+//       } catch (error) {
+//         console.error('Error fetching task updates:', error);
+//       }
+//     };
+//     fetchUpdates();
+//   }, [taskId, baseUrl]);
+
+//   // Format date
+//   const formatDate = (dateStr) => {
+//     if (!dateStr) return 'N/A';
+//     return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+//   };
+
+//   // Get priority icon
+//   const getPriorityIcon = (priority) => {
+//     switch (priority) {
+//       case 'High':
+//         return <FireIcon className="h-5 w-5 text-red-500" />;
+//       case 'Medium':
+//         return <FireIcon className="h-5 w-5 text-yellow-500" />;
+//       case 'Low':
+//         return <FireIcon className="h-5 w-5 text-blue-500" />;
+//       default:
+//         return null;
+//     }
+//   };
+
+//   // Get status icon
+//   const getStatusIcon = (status) => {
+//     switch (status) {
+//       case 'Pending':
+//         return <ClockIcon className="h-5 w-5 text-gray-500" />;
+//       case 'In Progress':
+//         return <ClockIcon className="h-5 w-5 text-blue-500" />;
+//       case 'Completed':
+//         return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+//       default:
+//         return null;
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+//       <div className="max-w-4xl mx-auto">
+//         {/* Back Button */}
+//         <button
+//           type="button"
+//           onClick={() => {
+//             if (from === 'myTasks') navigate('/tasks/my-tasks');
+//             else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
+//             else if (from === 'adminTasks') navigate('/admin/tasks/all');
+//             else navigate('/dashboard');
+//           }}
+//           className="flex items-center text-black hover:text-yellow-500 mb-6 transition sm:text-sm"
+//         >
+//           <ArrowLeftIcon className="h-5 w-5 mr-2" />
+//           Back
+//         </button>
+
+//         {/* Header */}
+//         <h2 className="text-3xl font-bold text-black mb-8 text-center">Task Progress</h2>
+
+//         {/* Timeline */}
+//         <div className="relative border-l-4 border-yellow-500 pl-8">
+//           {/* Original Task Card */}
+//           {task && (
+//             <div className="mb-12 relative">
+//               <div className="absolute w-5 h-5 bg-blue-500 rounded-full left-[-22px] top-3 border-2 border-white shadow-md"></div>
+//               <div className="bg-white border border-blue-500 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300">
+//                 <div className="bg-blue-100 p-4 rounded-t-lg border-b border-blue-500">
+//                   <h3 className="text-xl font-bold text-black truncate">{task.title}</h3>
+//                 </div>
+//                 <div className="p-4 space-y-3">
+//                   <p className="text-black text-sm">{task.description || 'No description'}</p>
+//                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+//                     <div className="flex items-center">
+//                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
+//                       <span>Created By: {task.created_by}</span>
+//                     </div>
+//                     <div className="flex items-center">
+//                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
+//                       <span>Assigned To: {task.assigned_to}</span>
+//                     </div>
+//                     <div className="flex items-center">
+//                       {getStatusIcon(task.status)}
+//                       <span className="ml-2">Status: {task.status}</span>
+//                     </div>
+//                     <div className="flex items-center">
+//                       {getPriorityIcon(task.priority)}
+//                       <span className="ml-2">Priority: {task.priority}</span>
+//                     </div>
+//                     <div className="flex items-center">
+//                       <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
+//                       <span>Due: {formatDate(task.due_date)}</span>
+//                     </div>
+//                     <div className="flex items-center">
+//                       <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
+//                       <span>Created: {formatDate(task.created_at)}</span>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+
+//           {/* Update Cards */}
+//           {updates.length > 0 ? (
+//             updates.map((update, index) => (
+//               <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to}/>
+//             ))
+//           ) : (
+//             <div className="text-center text-black text-sm mt-8">
+//               <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
+//               <p>No updates yet for this task.</p>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default TaskProgress;
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
@@ -411,13 +566,15 @@ function TaskProgress({ baseUrl }) {
     fetchUpdates();
   }, [taskId, baseUrl]);
 
-  // Format date
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
-  // Get priority icon
   const getPriorityIcon = (priority) => {
     switch (priority) {
       case 'High':
@@ -431,7 +588,6 @@ function TaskProgress({ baseUrl }) {
     }
   };
 
-  // Get status icon
   const getStatusIcon = (status) => {
     switch (status) {
       case 'Pending':
@@ -446,9 +602,9 @@ function TaskProgress({ baseUrl }) {
   };
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
+        {/* Updated Back Button */}
         <button
           type="button"
           onClick={() => {
@@ -457,7 +613,7 @@ function TaskProgress({ baseUrl }) {
             else if (from === 'adminTasks') navigate('/admin/tasks/all');
             else navigate('/dashboard');
           }}
-          className="flex items-center text-black hover:text-yellow-500 mb-6 transition sm:text-sm"
+          className="ml-[-10px] mb-6 flex items-center bg-yellow-300 text-black px-4 py-2 rounded-lg shadow-md hover:shadow-yellow-500/70 hover:-translate-y-[2px] transition-all font-semibold"
         >
           <ArrowLeftIcon className="h-5 w-5 mr-2" />
           Back
@@ -468,14 +624,16 @@ function TaskProgress({ baseUrl }) {
 
         {/* Timeline */}
         <div className="relative border-l-4 border-yellow-500 pl-8">
-          {/* Original Task Card */}
+          {/* Task Card */}
           {task && (
             <div className="mb-12 relative">
               <div className="absolute w-5 h-5 bg-blue-500 rounded-full left-[-22px] top-3 border-2 border-white shadow-md"></div>
               <div className="bg-white border border-blue-500 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300">
-                <div className="bg-blue-100 p-4 rounded-t-lg border-b border-blue-500">
+                {/* Updated Header */}
+                <div className="bg-yellow-400 p-4 rounded-t-lg border-b border-yellow-500">
                   <h3 className="text-xl font-bold text-black truncate">{task.title}</h3>
                 </div>
+
                 <div className="p-4 space-y-3">
                   <p className="text-black text-sm">{task.description || 'No description'}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
@@ -512,7 +670,7 @@ function TaskProgress({ baseUrl }) {
           {/* Update Cards */}
           {updates.length > 0 ? (
             updates.map((update, index) => (
-              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to}/>
+              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
             ))
           ) : (
             <div className="text-center text-black text-sm mt-8">
@@ -527,4 +685,3 @@ function TaskProgress({ baseUrl }) {
 }
 
 export default TaskProgress;
-
