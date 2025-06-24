@@ -733,15 +733,35 @@ function TaskProgress({ baseUrl }) {
 
           {/* Update Cards */}
           {updates.length > 0 ? (
-            [...updates].reverse().map((update, index) => (
-              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
-            ))
+            [...updates]
+              .filter(update => !update.is_system_generated) // ✅ exclude system-generated updates
+              .reverse()
+              .map((update, index) => (
+                <TaskUpdateCard
+                  key={index}
+                  update={update}
+                  baseUrl={baseUrl}
+                  assigned_to={task.assigned_to}
+                />
+              ))
           ) : (
             <div className="text-center text-black text-sm mt-8">
               <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
               <p>No updates yet for this task.</p>
             </div>
           )}
+
+          {/* {updates.length > 0 ? (
+            [...updates].reverse().map((update, index) => (
+              // <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
+              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to}/>
+            ))
+          ) : (
+            <div className="text-center text-black text-sm mt-8">
+              <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
+              <p>No updates yet for this task.</p>
+            </div>
+          )} */}
           {/* {updates.length > 0 ? (
             updates.map((update, index) => (
               <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />

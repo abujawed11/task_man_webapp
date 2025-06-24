@@ -84,6 +84,174 @@
 // export default TaskUpdateCard;
 
 
+// import {
+//   UserIcon,
+//   CalendarIcon,
+//   FireIcon,
+//   ClockIcon,
+//   CheckCircleIcon,
+//   DocumentArrowDownIcon,
+//   MusicalNoteIcon,
+// } from '@heroicons/react/24/solid';
+
+// function TaskUpdateCard({ update, baseUrl, assigned_to }) {
+//   // Format date
+//   const formatDate = (dateStr) => {
+//     if (!dateStr) return 'N/A';
+//     return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+//   };
+
+//   // Get priority icon
+//   const getPriorityIcon = (priority) => {
+//     switch (priority) {
+//       case 'High':
+//         return <FireIcon className="h-5 w-5 text-red-500" />;
+//       case 'Medium':
+//         return <FireIcon className="h-5 w-5 text-yellow-500" />;
+//       case 'Low':
+//         return <FireIcon className="h-5 w-5 text-blue-500" />;
+//       default:
+//         return null;
+//     }
+//   };
+
+//   // Get status icon
+//   const getStatusIcon = (status) => {
+//     switch (status) {
+//       case 'Pending':
+//         return <ClockIcon className="h-5 w-5 text-gray-500" />;
+//       case 'In Progress':
+//         return <ClockIcon className="h-5 w-5 text-blue-500" />;
+//       case 'Completed':
+//         return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+//       default:
+//         return null;
+//     }
+//   };
+
+//   return (
+//     <div className="mb-12 relative">
+//       {/* Timeline Dot */}
+//       <div className="absolute w-5 h-5 bg-yellow-500 rounded-full left-[-22px] top-3 border-2 border-white shadow-md"></div>
+
+//       <div className="bg-white border border-yellow-500 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300">
+//         {/* Header */}
+//         <div className="bg-yellow-100 p-4 rounded-t-lg border-b border-yellow-500 flex justify-between items-center">
+//           <div className="flex items-center space-x-2 text-sm text-black">
+//             <UserIcon className="h-5 w-5 text-yellow-500" />
+//             <span className="font-semibold">Updated By: {update.updated_by}</span>
+//           </div>
+//           <div className="flex items-center space-x-2 text-sm text-black">
+//             <UserIcon className="h-5 w-5 text-yellow-500" />
+//             <span className="font-semibold">Current Assignee: {update.assigned_to ? update.assigned_to : assigned_to}</span>
+//           </div>
+//           <div className="flex items-center space-x-2 text-sm text-black">
+//             <CalendarIcon className="h-5 w-5 text-yellow-500" />
+//             <span>{new Date(update.updated_at).toLocaleString()}</span>
+//           </div>
+//         </div>
+
+//         {/* Content */}
+//         <div className="p-4 space-y-3 text-sm text-black">
+//           {update.status && (
+//             <div className="flex items-center">
+//               {getStatusIcon(update.status)}
+//               <span className="ml-2">Status: {update.status}</span>
+//             </div>
+//           )}
+//           {update.title && (
+//             <div>
+//               <span className="font-semibold">Title:</span> {update.title}
+//             </div>
+//           )}
+//           {update.description && (
+//             <div>
+//               <span className="font-semibold">Description:</span> {update.description}
+//             </div>
+//           )}
+//           {update.priority && (
+//             <div className="flex items-center">
+//               {getPriorityIcon(update.priority)}
+//               <span className="ml-2">Priority: {update.priority}</span>
+//             </div>
+//           )}
+//           {update.due_date && (
+//             <div className="flex items-center">
+//               <CalendarIcon className="h-5 w-5 text-yellow-500 mr-2" />
+//               <span>Due Date: {formatDate(update.due_date)}</span>
+//             </div>
+//           )}
+//           {update.assigned_to && (
+//             <div className="flex items-center">
+//               <UserIcon className="h-5 w-5 text-yellow-500 mr-2" />
+//               <span>Assigned To: {update.assigned_to}</span>
+//             </div>
+//           )}
+//           {update.comment && (
+//             <div>
+//               <span className="font-semibold block mb-1">Comment:</span>
+//               <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+//                 {update.comment}
+//               </div>
+//             </div>
+//           )}
+//           {update.audio_path && (
+//             <div>
+//               <div className="flex items-center mb-2">
+//                 <MusicalNoteIcon className="h-5 w-5 text-yellow-500 mr-2" />
+//                 <span className="font-semibold">Audio Note</span>
+//               </div>
+//               <audio controls className="w-full max-w-xs">
+//                 <source src={`${baseUrl}/${update.audio_path}`} type="audio/mpeg" />
+//                 <source src={`${baseUrl}/${update.audio_path}`} type="audio/webm" />
+//                 Your browser does not support the audio element.
+//               </audio>
+//             </div>
+//           )}
+//           {update.file_path && (
+//             <div>
+//               <div className="flex items-center mb-2">
+//                 <DocumentArrowDownIcon className="h-5 w-5 text-yellow-500 mr-2" />
+//                 <span className="font-semibold">Attached File</span>
+//               </div>
+//               {update.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
+//                 <div className="relative">
+//                   <img
+//                     src={`${baseUrl}/${update.file_path}`}
+//                     alt="Attachment"
+//                     className="max-w-full h-40 object-cover rounded-md"
+//                   />
+//                   <a
+//                     href={`${baseUrl}/${update.file_path}`}
+//                     // download
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800 transition"
+//                   >
+//                     Download
+//                   </a>
+//                 </div>
+//               ) : (
+//                 <a
+//                   href={`${baseUrl}/${update.file_path}`}
+//                   download
+//                   className="flex items-center text-yellow-500 hover:text-yellow-600"
+//                 >
+//                   <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+//                   Download {update.file_path.split('/').pop()}
+//                 </a>
+//               )}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default TaskUpdateCard;
+
+
 import {
   UserIcon,
   CalendarIcon,
@@ -95,63 +263,60 @@ import {
 } from '@heroicons/react/24/solid';
 
 function TaskUpdateCard({ update, baseUrl, assigned_to }) {
-  // Format date
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
     return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
-  // Get priority icon
   const getPriorityIcon = (priority) => {
     switch (priority) {
-      case 'High':
-        return <FireIcon className="h-5 w-5 text-red-500" />;
-      case 'Medium':
-        return <FireIcon className="h-5 w-5 text-yellow-500" />;
-      case 'Low':
-        return <FireIcon className="h-5 w-5 text-blue-500" />;
-      default:
-        return null;
+      case 'High': return <FireIcon className="h-5 w-5 text-red-500" />;
+      case 'Medium': return <FireIcon className="h-5 w-5 text-yellow-500" />;
+      case 'Low': return <FireIcon className="h-5 w-5 text-blue-500" />;
+      default: return null;
     }
   };
 
-  // Get status icon
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Pending':
-        return <ClockIcon className="h-5 w-5 text-gray-500" />;
-      case 'In Progress':
-        return <ClockIcon className="h-5 w-5 text-blue-500" />;
-      case 'Completed':
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-      default:
-        return null;
+      case 'Pending': return <ClockIcon className="h-5 w-5 text-gray-500" />;
+      case 'In Progress': return <ClockIcon className="h-5 w-5 text-blue-500" />;
+      case 'Completed': return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+      default: return null;
     }
   };
 
   return (
     <div className="mb-12 relative">
-      {/* Timeline Dot */}
       <div className="absolute w-5 h-5 bg-yellow-500 rounded-full left-[-22px] top-3 border-2 border-white shadow-md"></div>
 
       <div className="bg-white border border-yellow-500 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300">
         {/* Header */}
-        <div className="bg-yellow-100 p-4 rounded-t-lg border-b border-yellow-500 flex justify-between items-center">
+        <div className="bg-yellow-100 p-4 rounded-t-lg border-b border-yellow-500 flex justify-between items-center flex-wrap gap-2">
           <div className="flex items-center space-x-2 text-sm text-black">
             <UserIcon className="h-5 w-5 text-yellow-500" />
             <span className="font-semibold">Updated By: {update.updated_by}</span>
           </div>
-          <div className="flex items-center space-x-2 text-sm text-black">
-            <UserIcon className="h-5 w-5 text-yellow-500" />
-            <span className="font-semibold">Current Assignee: {update.assigned_to ? update.assigned_to : assigned_to}</span>
-          </div>
+          {/* {update.assigned_to && (
+            <div className="flex items-center space-x-2 text-sm text-black">
+              <UserIcon className="h-5 w-5 text-yellow-500" />
+              <span className="font-semibold">Assigned To: {update.assigned_to}</span>
+            </div>
+          )}
+          {update.assigned_by && (
+            <div className="flex items-center space-x-2 text-sm text-black">
+              <UserIcon className="h-5 w-5 text-yellow-500" />
+              <span className="font-semibold">Assigned By: {update.assigned_by}</span>
+            </div>
+          )} */}
+
           <div className="flex items-center space-x-2 text-sm text-black">
             <CalendarIcon className="h-5 w-5 text-yellow-500" />
             <span>{new Date(update.updated_at).toLocaleString()}</span>
           </div>
         </div>
 
-        {/* Content */}
+        {/* Body */}
         <div className="p-4 space-y-3 text-sm text-black">
           {update.status && (
             <div className="flex items-center">
@@ -181,12 +346,6 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
               <span>Due Date: {formatDate(update.due_date)}</span>
             </div>
           )}
-          {update.assigned_to && (
-            <div className="flex items-center">
-              <UserIcon className="h-5 w-5 text-yellow-500 mr-2" />
-              <span>Assigned To: {update.assigned_to}</span>
-            </div>
-          )}
           {update.comment && (
             <div>
               <span className="font-semibold block mb-1">Comment:</span>
@@ -195,6 +354,30 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
               </div>
             </div>
           )}
+
+          {update.assigned_by && update.assigned_to && (
+            <div>
+              <span className="font-semibold block mb-1">Comment:</span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                {/* {update.assigned_by} assigned this task to {update.assigned_to} */}
+                <p>
+                  🔁 <b>{update.assigned_by_username}</b> reassigned the task to <b>{update.assigned_to_username}</b>
+                </p>
+                <p>
+                  🕓 Previous assignee was <b>{update.previous_assigned_to}</b>
+                </p>
+              </div>
+            </div>
+          )}
+          {/* {update.assigned_by && update.assigned_to && (
+            <div className="flex items-center space-x-2 text-sm text-black">
+              <UserIcon className="h-5 w-5 text-yellow-500" />
+              <span className="font-semibold">
+                {update.assigned_by} assigned this task to {update.assigned_to}
+              </span>
+            </div>
+          )} */}
+
           {update.audio_path && (
             <div>
               <div className="flex items-center mb-2">
@@ -223,7 +406,6 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
                   />
                   <a
                     href={`${baseUrl}/${update.file_path}`}
-                    // download
                     target="_blank"
                     rel="noopener noreferrer"
                     className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800 transition"
@@ -250,3 +432,4 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
 }
 
 export default TaskUpdateCard;
+
