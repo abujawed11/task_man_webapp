@@ -1,5 +1,7 @@
 // src/components/TaskCard.jsx
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import {
     FireIcon,
     ArrowDownIcon,
@@ -14,6 +16,7 @@ import {
 
 function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTasks' }) {
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const formatDate = (dateStr) => {
         if (!dateStr) return 'N/A';
@@ -48,6 +51,10 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
         if (!dueDate) return false;
         return new Date(dueDate) < new Date();
     };
+
+    const isUser = (user?.accountType === "Super Admin" && location === "adminTasks");
+    // console.log(isUser)
+    // console.log(user?.accountType)
 
     return (
         <div className="bg-white border border-yellow-500 rounded-xl shadow-md p-2 transition-transform transform hover:scale-105 hover:shadow-yellow-300/60 hover:shadow-2xl hover:ring-2 hover:ring-yellow-300 hover:ring-offset-2">
@@ -112,14 +119,35 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                     </span>
                 </div>
 
-                <div className="flex items-center">
-                    <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
-                    <span className="text-black text-sm">
-                        {location === 'myTasks' ? `Assigned By: ${task.created_by}` : `Assigned To: ${task.assigned_to}`}
-                    </span>
-                </div>
 
-                {task.audio_path && (
+
+                {isUser ? (<>
+                    <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                        <span className="text-black text-sm">
+                            Assigned By: {task.assigned_by}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                        <span className="text-black text-sm">
+                            Assigned To: {task.assigned_to}
+                        </span>
+                    </div>
+                </>) :
+                    (<div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                        <span className="text-black text-sm">
+                            
+
+
+                            {(location === 'myTasks') ? `Assigned By: ${task.assigned_by || task.created_by}` : `Assigned To: ${task.assigned_to}`}
+                        </span>
+                    </div>)
+                }
+
+                {/* {task.audio_path && (
                     <div className="mt-4">
                         <div className="flex items-center mb-2">
                             <MusicalNoteIcon className="h-5 w-5 text-yellow-500 mr-2" />
@@ -163,7 +191,12 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                             </a>
                         )}
                     </div>
-                )}
+                )} */}
+                <div className="flex items-center">
+                    <CalendarIcon className="h-5 w-5 text-gray-500 mr-2" />
+                    {/* <span className="text-black text-sm">Created: {formatDateTime(task.created_at)}</span> */}
+                    Last Updated: {formatDateTime(task.last_updated_at || task.created_at)}
+                </div>
             </div>
         </div>
     );

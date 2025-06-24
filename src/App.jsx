@@ -58,6 +58,7 @@ import CreateTask from './pages/CreateTask';
 import UpdateTask from './pages/UpdateTask';
 import TaskProgress from './pages/TaskProgress';
 import AllTasks from './pages/AllTasks';
+import { NotificationProvider } from './context/NotificationContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from 'react';
@@ -83,6 +84,7 @@ function App() {
 
   return (
     <AuthProvider>
+      <NotificationProvider baseUrl={baseUrl}> {/* 👈 wrap everything */}
       <BrowserRouter>
         <ToastContainer
           position="top-right"
@@ -109,6 +111,7 @@ function App() {
           <Route path="/admin/tasks/all" element={<ProtectedRoute><AllTasks baseUrl={baseUrl}/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

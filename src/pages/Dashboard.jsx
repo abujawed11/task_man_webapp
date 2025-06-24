@@ -372,7 +372,7 @@ function Dashboard({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400/20 rounded-full animate-pulse-slow opacity-50"></div>
+      {/* <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400/20 rounded-full animate-pulse-slow opacity-50"></div> */}
 
       <div className="max-w-7xl mx-auto relative z-10">
         <section className="bg-yellow-100 p-6 rounded-lg shadow-md mb-8 text-center relative animate-pulse-bg">

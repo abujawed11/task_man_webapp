@@ -497,6 +497,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
 
 function MyTasks({ baseUrl }) {
@@ -535,13 +536,18 @@ function MyTasks({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative">
-      <button
-        onClick={() => navigate('/dashboard')}
-        className="absolute top-4 left-4 z-10 text-black hover:text-yellow-600 transition-colors flex items-center gap-2 p-3 rounded-full bg-yellow-100/80 hover:bg-yellow-200 hover:shadow-lg hover:shadow-yellow-400/60"
-      >
-        <ArrowLeftIcon className="h-6 w-6" />
-        <span className="text-lg font-semibold">Back to Dashboard</span>
-      </button>
+      <div className="flex items-center mb-6">
+        <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center px-4 py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back to Dashboard
+          </button>
+        </Tilt>
+      </div>
+      <h1 className="text-3xl text-center font-bold text-black mb-10">My Tasks</h1>
 
       <div className="max-w-7xl mx-auto">
         {tasks.length === 0 ? (

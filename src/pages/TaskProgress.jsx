@@ -541,6 +541,7 @@ import {
   DocumentIcon,
 } from '@heroicons/react/24/solid';
 import TaskUpdateCard from '../components/TaskUpdateCard';
+import Tilt from 'react-parallax-tilt';
 
 function TaskProgress({ baseUrl }) {
   const { taskId } = useParams();
@@ -559,6 +560,7 @@ function TaskProgress({ baseUrl }) {
         });
         setUpdates(res.data.updates || []);
         setTask(res.data.task || null);
+        console.log(res.data.task)
       } catch (error) {
         console.error('Error fetching task updates:', error);
       }
@@ -605,7 +607,24 @@ function TaskProgress({ baseUrl }) {
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Updated Back Button */}
-        <button
+
+        {/* Updated Back Button */}
+        <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
+          <button
+            type="button"
+            onClick={() => {
+              if (from === 'myTasks') navigate('/tasks/my-tasks');
+              else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
+              else if (from === 'adminTasks') navigate('/admin/tasks/all');
+              else navigate('/dashboard');
+            }}
+            className="flex items-center px-4 py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float mb-6"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back
+          </button>
+        </Tilt>
+        {/* <button
           type="button"
           onClick={() => {
             if (from === 'myTasks') navigate('/tasks/my-tasks');
@@ -617,7 +636,7 @@ function TaskProgress({ baseUrl }) {
         >
           <ArrowLeftIcon className="h-5 w-5 mr-2" />
           Back
-        </button>
+        </button> */}
 
         {/* Header */}
         <h2 className="text-3xl font-bold text-black mb-8 text-center">Task Progress</h2>
@@ -639,7 +658,7 @@ function TaskProgress({ baseUrl }) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                     <div className="flex items-center">
                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Created By: {task.created_by}</span>
+                      <span>Assigned By: {task.created_by}</span>
                     </div>
                     <div className="flex items-center">
                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
@@ -661,6 +680,51 @@ function TaskProgress({ baseUrl }) {
                       <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
                       <span>Created: {formatDate(task.created_at)}</span>
                     </div>
+                    {/* Audio Note */}
+                    {task.audio_path && (
+                      <div className="mt-4">
+                        <div className="flex items-center mb-2">
+                          <span className="font-medium text-sm text-black">Audio Note:</span>
+                        </div>
+                        <audio controls src={`${baseUrl}/${task.audio_path}`} className="w-full max-w-xs" />
+                      </div>
+                    )}
+
+                    {/* Attached File */}
+                    {task.file_path && (
+                      <div className="mt-4">
+                        <div className="flex items-center mb-2">
+                          <span className="font-medium text-sm text-black">Attached File:</span>
+                        </div>
+                        {task.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
+                          <div className="relative">
+                            <img
+                              src={`${baseUrl}/${task.file_path}`}
+                              alt="Task attachment"
+                              className="max-w-full h-40 object-cover rounded-md"
+                            />
+                            <a
+                              href={`${baseUrl}/${task.file_path}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
+                            >
+                              Download
+                            </a>
+                          </div>
+                        ) : (
+                          <a
+                            href={`${baseUrl}/${task.file_path}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-yellow-500 hover:text-yellow-600 text-sm"
+                          >
+                            Download {task.file_path.split('/').pop()}
+                          </a>
+                        )}
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>
@@ -669,7 +733,7 @@ function TaskProgress({ baseUrl }) {
 
           {/* Update Cards */}
           {updates.length > 0 ? (
-            updates.map((update, index) => (
+            [...updates].reverse().map((update, index) => (
               <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
             ))
           ) : (
@@ -678,6 +742,16 @@ function TaskProgress({ baseUrl }) {
               <p>No updates yet for this task.</p>
             </div>
           )}
+          {/* {updates.length > 0 ? (
+            updates.map((update, index) => (
+              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
+            ))
+          ) : (
+            <div className="text-center text-black text-sm mt-8">
+              <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
+              <p>No updates yet for this task.</p>
+            </div>
+          )} */}
         </div>
       </div>
     </div>

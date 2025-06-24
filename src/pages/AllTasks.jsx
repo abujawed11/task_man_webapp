@@ -730,6 +730,7 @@ import {
   ArrowDownIcon,
 } from '@heroicons/react/24/solid';
 import TaskCard from '../components/TaskCard';
+import TaskFilterSort from '../components/TaskFilterSort';
 
 function AllTasks({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
@@ -887,6 +888,24 @@ function AllTasks({ baseUrl }) {
           </button> */}
         </div>
 
+        {/* Filters and Sorting */}
+        {/* <TaskFilterSort
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onResetFilters={resetFilters}
+          sortConfig={sortConfig}
+          onSortChange={setSortConfig}
+          users={users}
+        />
+
+        <button
+          onClick={() => setSortConfig({ ...sortConfig })}
+          className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition"
+        >
+          Sort
+        </button> */}
+
+
         {/* Filters */}
         <div className="bg-white border border-yellow-500 rounded-lg shadow-md p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -917,7 +936,7 @@ function AllTasks({ baseUrl }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-black mb-1">Created By</label>
+              <label className="block text-sm font-medium text-black mb-1">Assigned By</label>
               <select
                 name="created_by"
                 value={filters.created_by}
@@ -979,83 +998,14 @@ function AllTasks({ baseUrl }) {
               />
             </div>
 
-
-            {/* <div>
-              <label className="block text-sm font-medium text-black mb-1">Due Date Start</label>
-              <input
-                type="date"
-                name="due_date_start"
-                value={filters.due_date_start}
-                onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">Due Date End</label>
-              <input
-                type="date"
-                name="due_date_end"
-                value={filters.due_date_end}
-                onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">Created Date Start</label>
-              <input
-                type="date"
-                name="created_at_start"
-                value={filters.created_at_start}
-                onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">Created Date End</label>
-              <input
-                type="date"
-                name="created_at_end"
-                value={filters.created_at_end}
-                onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
-              />
-            </div> */}
           </div>
         </div>
 
         {/* Sorting */}
-        {/* <div className="flex items-center mb-6 space-x-4">
-          <label className="text-sm font-medium text-black">Sort By:</label>
-          <select
-            value={sortConfig.field}
-            onChange={(e) => handleSortChange(e.target.value)}
-            className="border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
-          >
-            <option value="created_at">Created Date</option>
-            <option value="created_time">Created Time</option> {/* ✅ Added */}
-        {/* <option value="due_date">Due Date</option>
-            <option value="priority">Priority</option>
-            <option value="status">Status</option>
-            <option value="assigned_to">Assigned To</option>
-            <option value="created_by">Created By</option>
-          </select>
-          <button
-            onClick={() => handleSortChange(sortConfig.field)}
-            className="flex items-center bg-black text-white px-3 py-2 rounded-md hover:bg-gray-800 transition text-sm"
-          >
-            {sortConfig.order === 'ASC' ? (
-              <ArrowUpIcon className="h-5 w-5 mr-1" />
-            ) : (
-              <ArrowDownIcon className="h-5 w-5 mr-1" />
-            )}
-            {sortConfig.order}
-          </button>
-        // </div> */}
 
         <div className="flex items-center mb-6 space-x-4">
           <label className="text-sm font-medium text-black">Sort By:</label>
 
-          {/* Field Dropdown */}
           <select
             value={sortConfig.field}
             onChange={(e) => setSortConfig((prev) => ({ ...prev, field: e.target.value }))}
@@ -1070,7 +1020,7 @@ function AllTasks({ baseUrl }) {
             <option value="created_by">Created By</option>
           </select>
 
-          {/* Order Dropdown */}
+      
           <select
             value={sortConfig.order}
             onChange={(e) => setSortConfig((prev) => ({ ...prev, order: e.target.value }))}
@@ -1080,7 +1030,6 @@ function AllTasks({ baseUrl }) {
             <option value="DESC">Descending</option>
           </select>
 
-          {/* Sort Button */}
           <button
             onClick={() => setSortConfig({ ...sortConfig })}
             className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition"

@@ -263,12 +263,94 @@
 
 //---------------------------------------------------------------------------
 
+// import { useState, useEffect, useContext } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { AuthContext } from '../context/AuthContext';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
+// import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+// import TaskCard from '../components/TaskCard';
+
+// function AssignedTasks({ baseUrl }) {
+//   const { user, loading } = useContext(AuthContext);
+//   const navigate = useNavigate();
+//   const [tasks, setTasks] = useState([]);
+//   const [expandedDescriptions, setExpandedDescriptions] = useState({});
+
+//   useEffect(() => {
+//     const fetchTasks = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+//         if (!token) throw new Error('No token found');
+//         const response = await axios.get(`${baseUrl}/api/tasks/created-by-me`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setTasks(response.data);
+//       } catch (error) {
+//         toast.error('Failed to load tasks');
+//         console.error('Fetch tasks error:', error);
+//       }
+//     };
+//     if (user && !loading) fetchTasks();
+//   }, [user, loading, baseUrl]);
+
+//   const toggleDescription = (taskId) => {
+//     setExpandedDescriptions((prev) => ({
+//       ...prev,
+//       [taskId]: !prev[taskId],
+//     }));
+//   };
+
+//   if (loading) {
+//     return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading...</div>;
+//   }
+
+//   return (
+//     <>
+//       <button
+//         onClick={() => navigate('/dashboard')}
+//         className="flex items-center text-black hover:text-gray-700 mb-4 ml-6 mt-4"
+//       >
+//         <ArrowLeftIcon className="h-5 w-5 mr-1" />
+//         Back to Dashboard
+//       </button>
+
+//       <h1 className="text-3xl text-center font-bold text-black mb-2">Assigned Task Page</h1>
+
+//       <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+//         <div className="max-w-7xl mx-auto">
+//           {tasks.length === 0 ? (
+//             <p className="text-black text-center text-lg">No tasks assigned to you.</p>
+//           ) : (
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//               {tasks.map((task) => (
+//                 <TaskCard
+//                   key={task.task_id}
+//                   task={task}
+//                   baseUrl={baseUrl}
+//                   expanded={expandedDescriptions[task.task_id]}
+//                   toggleDescription={toggleDescription}
+//                   location="assignedTasks"
+//                 />
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
+// export default AssignedTasks;
+//-----------------------------------------------------------------
+
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
 
 function AssignedTasks({ baseUrl }) {
@@ -302,44 +384,46 @@ function AssignedTasks({ baseUrl }) {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading...</div>;
+    return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading tasks
+  </div>;
   }
 
   return (
-    <>
-      <button
-        onClick={() => navigate('/dashboard')}
-        className="flex items-center text-black hover:text-gray-700 mb-4 ml-6 mt-4"
-      >
-        <ArrowLeftIcon className="h-5 w-5 mr-1" />
-        Back to Dashboard
-      </button>
-
-      <h1 className="text-3xl text-center font-bold text-black mb-2">Assigned Task Page</h1>
-
-      <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {tasks.length === 0 ? (
-            <p className="text-black text-center text-lg">No tasks assigned to you.</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tasks.map((task) => (
-                <TaskCard
-                  key={task.task_id}
-                  task={task}
-                  baseUrl={baseUrl}
-                  expanded={expandedDescriptions[task.task_id]}
-                  toggleDescription={toggleDescription}
-                  location="assignedTasks"
-                />
-              ))}
-            </div>
-          )}
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-10 px-4">
+      <div className="flex items-center mb-6">
+        <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center px-4 py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back to Dashboard
+          </button>
+        </Tilt>
       </div>
-    </>
+      <h1 className="text-3xl text-center font-bold text-black mb-10">Assigned Task Page</h1>
+
+      <div className="max-w-7xl mx-auto">
+        {tasks.length === 0 ? (
+          <p className="text-black text-center text-lg">No tasks assigned to you.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.task_id}
+                task={task}
+                baseUrl={baseUrl}
+                expanded={expandedDescriptions[task.task_id]}
+                toggleDescription={toggleDescription}
+                location="assignedTasks"
+              />
+
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
 export default AssignedTasks;
-
