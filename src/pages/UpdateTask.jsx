@@ -817,7 +817,8 @@ function UpdateTask({ baseUrl }) {
                   <span>{file ? file.name : 'Choose File'}</span>
                   <input
                     type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
+                    // accept=".pdf,.jpg,.jpeg,.png"
+                    accept="*/*"
                     onChange={handleFileChange}
                     className="hidden"
                   />
