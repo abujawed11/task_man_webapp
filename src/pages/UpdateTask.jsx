@@ -490,6 +490,7 @@ function UpdateTask({ baseUrl }) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordingInterval, setRecordingInterval] = useState(null);
   const [users, setUsers] = useState([]);
+  const [initialTask, setInitialTask] = useState({});
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -505,6 +506,15 @@ function UpdateTask({ baseUrl }) {
         setDueDate(res.data.due_date?.split('T')[0] || '');
         setPriority(res.data.priority);
         setAssignedTo(res.data.assigned_to);
+        setInitialTask({
+          title: res.data.title,
+          description: res.data.description,
+          due_date: res.data.due_date?.split('T')[0] || '',
+          priority: res.data.priority,
+          assigned_to: res.data.assigned_to,
+          status: res.data.status,
+        });
+        // console.log(initialTask)
       } catch (error) {
         toast.error('Failed to fetch task');
       }
@@ -591,14 +601,50 @@ function UpdateTask({ baseUrl }) {
 
   if (!task) return <div className="text-center mt-10 text-black">Loading task...</div>;
 
-//   const isCreator = user?.username === task.created_by && user?.accountType !== 'Super Admin';
-//   const isAssignee = user?.username === task.assigned_to || user?.accountType === 'Super Admin';
+  //   const isCreator = user?.username === task.created_by && user?.accountType !== 'Super Admin';
+  //   const isAssignee = user?.username === task.assigned_to || user?.accountType === 'Super Admin';
 
   const isCreator = user?.username === task.created_by || user?.accountType === 'Super Admin';
-//   console.log("Created By:",task.created_by)
-//   console.log("Account Type:",user?.accountType)
+  //   console.log("Created By:",task.created_by)
+  //   console.log("Account Type:",user?.accountType)
 
   const isAssignee = user?.username === task.assigned_to;
+
+  // const isSuperAdmin = user?.accountType === 'Super Admin';
+  // const isLatestAssigner = user?.username === task.assigned_by;
+  // const canEditAllFields = isSuperAdmin || isLatestAssigner;
+
+  //const isCreatorOrSuperAdmin = user?.username === task?.created_by || user?.accountType === "Super Admin";
+
+  const hasChangedByCreator = isCreator &&
+    (
+      title !== initialTask.title ||
+      description !== initialTask.description ||
+      dueDate !== initialTask.due_date ||
+      priority !== initialTask.priority ||
+      assignedTo !== initialTask.assigned_to ||
+      status !== initialTask.status ||
+      comment.trim() !== '' ||
+      audioBlob ||
+      file
+    );
+
+  const hasChangedByAssignee = isAssignee &&
+    (
+      comment.trim() !== '' ||
+      audioBlob ||
+      file
+    );
+  // console.log('Initial:', initialTask);
+  // console.log('Current:', { title, description, dueDate, priority, assignedTo, status,comment,audioBlob,file });
+
+
+  const canUpdate = hasChangedByCreator || hasChangedByAssignee;
+  // console.log(canUpdate)
+  // console.log(comment.trim() !== '')
+  // console.log(hasChangedByAssignee)
+  // console.log("isAssignee: ", isAssignee)
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white flex items-center justify-center px-4 py-10">
@@ -685,12 +731,31 @@ function UpdateTask({ baseUrl }) {
                       className="peer w-full px-4 pt-6 pb-2 rounded-lg border text-black bg-white/70 shadow-sm placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-500 border-gray-300 focus:shadow-yellow-400/60"
                     >
                       <option value="" hidden>Select User</option>
-                      {users.map((u, i) => <option key={i} value={u}>{u}</option>)}
+                      {users
+                        .filter((u) => u !== task?.created_by) // ✅ Exclude task creator
+                        .map((u, i) => (
+                          <option key={i} value={u}>
+                            {u}
+                          </option>
+                        ))}
                     </select>
                     <label className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-focus:text-yellow-500">
                       Assign To
                     </label>
                   </div>
+                  {/* <div className="relative hover:shadow-yellow-400/50">
+                    <select
+                      value={assignedTo}
+                      onChange={(e) => setAssignedTo(e.target.value)}
+                      className="peer w-full px-4 pt-6 pb-2 rounded-lg border text-black bg-white/70 shadow-sm placeholder-transparent focus:outline-none focus:ring-2 focus:ring-yellow-500 border-gray-300 focus:shadow-yellow-400/60"
+                    >
+                      <option value="" hidden>Select User</option>
+                      {users.map((u, i) => <option key={i} value={u}>{u}</option>)}
+                    </select>
+                    <label className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-focus:text-yellow-500">
+                      Assign To
+                    </label>
+                  </div> */}
                 </Tilt>
               </>
             )}
@@ -761,9 +826,17 @@ function UpdateTask({ baseUrl }) {
             </Tilt>
 
             <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} className="w-full">
-              <button
+              {/* <button
                 type="submit"
                 className="w-full py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float"
+              >
+                Update Task
+              </button> */}
+              <button
+                type="submit"
+                disabled={!canUpdate}
+                className={`w-full py-2 font-bold rounded-lg transition hover:-translate-y-[2px] animate-float ${canUpdate ? 'bg-black text-yellow-400 hover:bg-gray-900 hover:shadow-yellow-400/50 shadow-lg' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
               >
                 Update Task
               </button>

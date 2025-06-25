@@ -147,7 +147,7 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                         <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
                         <span className="text-black text-sm">
 
-
+                            {/* {(location === 'myTasks') ? `Assigned By: ${task.assigned_by}` : `Assigned To: ${task.assigned_to}`} */}
 
                             {(location === 'myTasks') ? `Assigned By: ${task.assigned_by || task.created_by}` : `Assigned To: ${task.assigned_to}`}
                         </span>
