@@ -658,7 +658,7 @@ function TaskProgress({ baseUrl }) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                     <div className="flex items-center">
                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Assigned By: {task.created_by}</span>
+                      <span>Created By: {task.created_by}</span>
                     </div>
                     <div className="flex items-center">
                       <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
@@ -732,7 +732,7 @@ function TaskProgress({ baseUrl }) {
           )}
 
           {/* Update Cards */}
-          {updates.length > 0 ? (
+          {(updates.length > 1) ? (
             [...updates]
               .filter(update => !update.is_system_generated) // ✅ exclude system-generated updates
               .reverse()

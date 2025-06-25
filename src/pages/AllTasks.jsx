@@ -728,9 +728,12 @@ import {
   FunnelIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  ArrowLeftIcon
 } from '@heroicons/react/24/solid';
 import TaskCard from '../components/TaskCard';
 import TaskFilterSort from '../components/TaskFilterSort';
+import Tilt from 'react-parallax-tilt';
+
 
 function AllTasks({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
@@ -762,6 +765,10 @@ function AllTasks({ baseUrl }) {
         const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        console.log(tasksResponse.data)
+
+        
         setTasks(tasksResponse.data);
         setFilteredTasks(tasksResponse.data);
 
@@ -876,7 +883,17 @@ function AllTasks({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center px-4 py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Back
+          </button>
+        </Tilt>
       <div className="max-w-7xl mx-auto">
+        
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-black">All Tasks</h2>
@@ -936,7 +953,7 @@ function AllTasks({ baseUrl }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-black mb-1">Assigned By</label>
+              <label className="block text-sm font-medium text-black mb-1">Created By</label>
               <select
                 name="created_by"
                 value={filters.created_by}

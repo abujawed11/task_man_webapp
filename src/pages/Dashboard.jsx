@@ -271,6 +271,7 @@ import {
   ClockIcon,
   PlayIcon,
   CheckCircleIcon,
+  
 } from '@heroicons/react/24/solid';
 
 import {
@@ -283,6 +284,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import Tilt from 'react-parallax-tilt';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
@@ -372,6 +374,7 @@ function Dashboard({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      
       {/* <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400/20 rounded-full animate-pulse-slow opacity-50"></div> */}
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -408,6 +411,29 @@ function Dashboard({ baseUrl }) {
             Create New Task
           </NavLink>
         </section>
+        
+        {/* Admin Panel */}
+        {user?.accountType === 'Super Admin' && (
+          <section className="mb-8 mt-12">
+            <h2 className="text-2xl font-extrabold text-black mb-6 tracking-wide">Admin Panel</h2>
+            <div className="bg-yellow-200 p-6 rounded-lg shadow-md border border-yellow-300">
+              <p className="text-black mb-4 font-medium leading-relaxed">Manage Task and Users.</p>
+              <NavLink
+                to="/admin/tasks/all"
+                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 mr-2 card-hover"
+              >
+                Manage All Tasks
+              </NavLink>
+              <NavLink
+                to="/admin/all-users"
+                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 card-hover"
+              >
+                Manage All users
+              </NavLink>
+            </div>
+          </section>
+        )}
+
 
         {/* Task Summary */}
         <section className="mb-8">
@@ -472,7 +498,7 @@ function Dashboard({ baseUrl }) {
         </section>
 
         {/* Admin Panel */}
-        {user?.accountType === 'Super Admin' && (
+        {/* {user?.accountType === 'Super Admin' && (
           <section className="mb-8 mt-12">
             <h2 className="text-2xl font-extrabold text-black mb-6 tracking-wide">Admin Panel</h2>
             <div className="bg-yellow-200 p-6 rounded-lg shadow-md border border-yellow-300">
@@ -491,7 +517,7 @@ function Dashboard({ baseUrl }) {
               </NavLink>
             </div>
           </section>
-        )}
+        )} */}
       </div>
     </div>
   );

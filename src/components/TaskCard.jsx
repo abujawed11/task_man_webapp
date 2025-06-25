@@ -122,12 +122,19 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
 
 
                 {isUser ? (<>
+
                     <div className="flex items-center">
                         <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
                         <span className="text-black text-sm">
-                            Assigned By: {task.assigned_by}
+                            Created By: {task.created_by}
                         </span>
                     </div>
+                    {(task.created_by !== task.assigned_by) && <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
+                        <span className="text-black text-sm">
+                            Re-assigned By: {task.assigned_by}
+                        </span>
+                    </div>}
 
                     <div className="flex items-center">
                         <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
@@ -139,7 +146,7 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                     (<div className="flex items-center">
                         <UserIcon className="h-5 w-5 text-gray-500 mr-2" />
                         <span className="text-black text-sm">
-                            
+
 
 
                             {(location === 'myTasks') ? `Assigned By: ${task.assigned_by || task.created_by}` : `Assigned To: ${task.assigned_to}`}
@@ -195,7 +202,7 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                 <div className="flex items-center">
                     <CalendarIcon className="h-5 w-5 text-gray-500 mr-2" />
                     {/* <span className="text-black text-sm">Created: {formatDateTime(task.created_at)}</span> */}
-                    Last Updated: {formatDateTime(task.last_updated_at || task.created_at)}
+                    Last Updated: {formatDateTime(task.updated_at || task.last_updated_at)}
                 </div>
             </div>
         </div>

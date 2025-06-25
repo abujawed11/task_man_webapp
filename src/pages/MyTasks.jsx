@@ -514,6 +514,7 @@ function MyTasks({ baseUrl }) {
         const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log(response.data)
         setTasks(response.data);
       } catch (error) {
         toast.error('Failed to load tasks');
