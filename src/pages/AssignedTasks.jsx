@@ -349,9 +349,10 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
+import { downloadTaskExcel } from '../utils/downloadExcel';
 
 function AssignedTasks({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
@@ -384,9 +385,29 @@ function AssignedTasks({ baseUrl }) {
     }));
   };
 
+  // const handleDownload = async (mode, username) => {
+  //   console.log(mode, username)
+  //   try {
+  //     const response = await axios.get(`${baseUrl}/api/tasks/export`, {
+  //       params: { mode, username },
+  //       responseType: 'blob',
+  //     });
+
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     const fileName = mode + "Task";
+  //     link.setAttribute('download', `${fileName}.xlsx`);
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   } catch (err) {
+  //     console.error('Download failed', err);
+  //   }
+  // };
+
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading tasks
-  </div>;
+    </div>;
   }
 
   return (
@@ -403,6 +424,17 @@ function AssignedTasks({ baseUrl }) {
         </Tilt>
       </div>
       <h1 className="text-3xl text-center font-bold text-black mb-10">Assigned Task Page</h1>
+
+      <div className="flex justify-end max-w-7xl mx-auto mb-6 px-2">
+        <button
+          // onClick={() => handleDownload('assign', user.username)}
+          onClick={() => downloadTaskExcel({ baseUrl, mode: 'assign', username: user.username })}
+          className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-500 hover:shadow-lg transition cursor-pointer"
+        >
+          <ArrowDownTrayIcon className="h-5 w-5" />
+          Download Assigned Tasks(.xlsx)
+        </button>
+      </div>
 
       <div className="max-w-7xl mx-auto">
         {tasks.length === 0 ? (
