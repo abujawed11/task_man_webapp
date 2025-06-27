@@ -500,6 +500,8 @@ import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
 import { downloadTaskExcel } from '../utils/downloadExcel';
+import FilterMenu from '../components/FilterMenu';
+import SortMenu from '../components/SortMenu';
 
 function MyTasks({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
@@ -611,6 +613,11 @@ function MyTasks({ baseUrl }) {
       </button> */}
 
       <div className="flex justify-end max-w-7xl mx-auto mb-6 px-2">
+
+        {/* <div className="flex gap-4">
+          <FilterMenu />
+          <SortMenu />
+        </div> */}
         <button
           // onClick={() => handleDownload('my', user.username)}
           onClick={() => downloadTaskExcel({ baseUrl, mode: 'my', username: user.username })}

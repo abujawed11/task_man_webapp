@@ -604,10 +604,19 @@ function CreateTask({ baseUrl }) {
 
               <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} className="w-full">
                 <div className="flex items-center gap-4 hover:shadow-yellow-400/50">
-                  <button
+                  {/* <button
                     type="button"
                     onClick={isRecording ? stopRecording : startRecording}
                     className={`flex items-center px-4 py-2 rounded-md text-white ${isRecording ? 'bg-red-600' : 'bg-black'} hover:opacity-90 transition hover:-translate-y-[2px] hover:shadow-yellow-300/60 animate-float`}
+                  > */}
+                  <button
+                    type="button"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={`flex items-center px-4 py-2 rounded-md font-semibold transition hover:-translate-y-[2px] active:translate-y-0 animate-float
+                    ${isRecording
+                        ? 'bg-red-600 text-white hover:shadow-red-400/60'
+                        : 'bg-black text-yellow-400 hover:bg-gray-900 hover:shadow-yellow-400/50'
+                      }`}
                   >
                     <MicrophoneIcon className="h-5 w-5 mr-2" />
                     {isRecording ? `Stop (${recordingTime}s)` : 'Record Audio'}

@@ -58,6 +58,7 @@ import CreateTask from './pages/CreateTask';
 import UpdateTask from './pages/UpdateTask';
 import TaskProgress from './pages/TaskProgress';
 import AllTasks from './pages/AllTasks';
+import NotificationPage from './pages/NotificationPage';
 import { NotificationProvider } from './context/NotificationContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -112,6 +113,7 @@ function App() {
           <Route path="/tasks/:taskId/update" element={<ProtectedRoute><UpdateTask baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/:taskId/progress" element={<ProtectedRoute><TaskProgress baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/admin/tasks/all" element={<ProtectedRoute><AllTasks baseUrl={baseUrl}/></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><NotificationPage /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
       </NotificationProvider>

@@ -13,6 +13,8 @@ function NotificationPage() {
     return isNaN(parsed) ? '—' : parsed.toLocaleString();
   };
 
+  console.log(notifications)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-10 px-6">
       <button
