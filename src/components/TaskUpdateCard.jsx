@@ -509,32 +509,101 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
         </div>
 
         <div className="p-4 space-y-3 text-sm text-black">
-          {update.status && (
+          {/* {update.status && (
             <div className="flex items-center">
               {getStatusIcon(update.status)}
               <span className="ml-2">Status: {update.status}</span>
             </div>
+          )} */}
+          {/* {update.status && (
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center">
+                  {getStatusIcon(update.status)} Status Changed: <b className="ml-1">{update.status}</b>
+                </p>
+              </div>
+            </div>
+          )} */}
+          {update.status && (
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center gap-2">
+                  <span>{getStatusIcon(update.status)}</span>
+                  Status Changed:<b>{update.status}</b>
+                </p>
+              </div>
+            </div>
           )}
-          {update.title && (
+          {/* {update.title && (
             <div>
               <span className="font-semibold">Title:</span> {update.title}
             </div>
+          )} */}
+          {update.title && (
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center">
+                  Title Changed: <b className="ml-1">{update.title}</b>
+                </p>
+              </div>
+            </div>
           )}
-          {update.description && (
+          {/* {update.description && (
             <div>
               <span className="font-semibold">Description:</span> {update.description}
             </div>
+          )} */}
+
+          {update.description && (
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center">
+                  Description Changed: <b className="ml-1">{update.description}</b>
+                </p>
+              </div>
+            </div>
           )}
-          {update.priority && (
+          {/* {update.priority && (
             <div className="flex items-center">
               {getPriorityIcon(update.priority)}
               <span className="ml-2">Priority: {update.priority}</span>
             </div>
+          )} */}
+
+          {update.priority && (
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center">
+                  {getPriorityIcon(update.priority)}
+                  Priority Changed: <b className="ml-1">{update.priority}</b>
+                </p>
+              </div>
+            </div>
           )}
+
+
+          {/* {update.due_date && (
+            <div >
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <CalendarIcon className="h-5 w-5 text-yellow-500 mr-2" />
+                <span className="font-semibold block">Due Date Changed: </span> {formatDate(update.due_date)}
+              </div>
+            </div>
+          )} */}
           {update.due_date && (
-            <div className="flex items-center">
-              <CalendarIcon className="h-5 w-5 text-yellow-500 mr-2" />
-              <span>Due Date: {formatDate(update.due_date)}</span>
+            <div>
+              <span className="font-semibold block mb-1"></span>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
+                <p className="flex items-center">
+                  <CalendarIcon className="h-5 w-5 text-yellow-500 mr-2" />
+                  Due Date Changed: <b className="ml-1">{formatDate(update.due_date)}</b>
+                </p>
+              </div>
             </div>
           )}
           {update.comment && (
@@ -548,7 +617,7 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
 
           {update.assigned_by && update.assigned_to && (
             <div>
-              <span className="font-semibold block mb-1">Comment:</span>
+              <span className="font-semibold block mb-1"></span>
               <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded text-sm">
                 <p>🔁 <b>{update.assigned_by_username}</b> reassigned the task to <b>{update.assigned_to_username}</b></p>
                 <p>🕓 Previous assignee was <b>{update.previous_assigned_to}</b></p>

@@ -79,7 +79,10 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // ✅ You had this already
-  const baseUrl = 'http://localhost:5000'; // ✅ Define this
+
+
+  // const baseUrl = 'http://localhost:5000';
+  const baseUrl = import.meta.env.VITE_API_BASEURL;
 
   useEffect(() => {
     const restoreSession = async () => {

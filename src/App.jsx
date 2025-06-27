@@ -80,7 +80,10 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
 
-  const baseUrl = "http://localhost:5000"
+  // const baseUrl = "http://localhost:5000";
+
+  const baseUrl = import.meta.env.VITE_API_BASEURL;
+
 
   return (
     <AuthProvider>

@@ -767,7 +767,7 @@ function Signup({ baseUrl = 'http://localhost:5000' }) {
         phoneNumber: formData.phoneNumber,
         role: formData.role,
         password: formData.password,
-        otp,
+        otp,// 🔐 Bypass actual OTP entry
         inviteCode: formData.accountType === 'Super Admin' ? inviteCode : null,
         accountType: formData.accountType,
       });
