@@ -79,10 +79,15 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
             </div>
 
             <div className="p-4 space-y-3">
-                <p className="text-black text-sm">
+                {/* <p className="text-black text-sm">
                     {expanded || task.description?.length <= 100
                         ? task.description || 'No description'
                         : `${task.description.slice(0, 100)}...`}
+                </p> */}
+                <p className="text-black text-sm">
+                    {expanded || (task.description || '').length <= 100
+                        ? task.description || 'No description'
+                        : `${(task.description || '').slice(0, 100)}...`}
                 </p>
                 {task.description?.length > 100 && (
                     <button
@@ -154,51 +159,6 @@ function TaskCard({ task, baseUrl, expanded, toggleDescription, location = 'myTa
                     </div>)
                 }
 
-                {/* {task.audio_path && (
-                    <div className="mt-4">
-                        <div className="flex items-center mb-2">
-                            <MusicalNoteIcon className="h-5 w-5 text-yellow-500 mr-2" />
-                            <span className="text-black text-sm">Audio Note</span>
-                        </div>
-                        <audio controls src={`${baseUrl}/${task.audio_path}`} className="w-full max-w-xs" />
-                    </div>
-                )}
-
-                {task.file_path && (
-                    <div className="mt-4">
-                        <div className="flex items-center mb-2">
-                            <DocumentArrowDownIcon className="h-5 w-5 text-yellow-500 mr-2" />
-                            <span className="text-black text-sm">Attached File</span>
-                        </div>
-                        {task.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
-                            <div className="relative">
-                                <img
-                                    src={`${baseUrl}/${task.file_path}`}
-                                    alt="Task attachment"
-                                    className="max-w-full h-40 object-cover rounded-md"
-                                />
-                                <a
-                                    href={`${baseUrl}/${task.file_path}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
-                                >
-                                    Download
-                                </a>
-                            </div>
-                        ) : (
-                            <a
-                                href={`${baseUrl}/${task.file_path}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center text-yellow-500 hover:text-yellow-600 text-sm"
-                            >
-                                <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
-                                Download {task.file_path.split('/').pop()}
-                            </a>
-                        )}
-                    </div>
-                )} */}
                 <div className="flex items-center">
                     <CalendarIcon className="h-5 w-5 text-gray-500 mr-2" />
                     {/* <span className="text-black text-sm">Created: {formatDateTime(task.created_at)}</span> */}

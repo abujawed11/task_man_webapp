@@ -53,6 +53,7 @@ export const NotificationProvider = ({ children, baseUrl }) => {
       const res = await axios.get(`${baseUrl}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // console.log(res.data)
       setNotifications(res.data || []);
       setUnread(res.data.filter((n) => !n.is_read).length); // use `is_read` from DB
     } catch (err) {

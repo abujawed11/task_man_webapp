@@ -437,6 +437,260 @@
 
 // export default BellMenu;
 
+// import { useState, useRef, useEffect, useContext } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { NotificationContext } from '../context/NotificationContext';
+// import { BellIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+
+// function BellMenu() {
+//   const [showDropdown, setShowDropdown] = useState(false);
+//   const bellRef = useRef(null);
+//   const { notifications, markAsRead } = useContext(NotificationContext);
+//   const navigate = useNavigate();
+
+//   // Close dropdown if clicked outside
+//   useEffect(() => {
+//     const handleClickOutside = (e) => {
+//       if (bellRef.current && !bellRef.current.contains(e.target)) {
+//         setShowDropdown(false);
+//       }
+//     };
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, []);
+
+//   const handleMarkAsRead = (id) => {
+//     markAsRead(id);
+//     setShowDropdown(false);
+//   };
+
+//   const handleViewTask = (taskId) => {
+//     setShowDropdown(false);
+//     navigate(`/tasks/${taskId}/progress`);
+//   };
+
+//    // Notification type labels
+//   const typeLabels = {
+//     task_created: 'Task Created',
+//     task_updated: 'Task Updated',
+//     task_reassigned: 'Task Re-assigned',
+//   };
+//   return (
+//     <div className="relative" ref={bellRef}>
+//       {/* Bell Icon */}
+//       <button
+//         onClick={() => setShowDropdown(!showDropdown)}
+//         className="relative p-2 rounded-full hover:bg-yellow-100 transition"
+//       >
+//         <BellIcon className="h-6 w-6 text-black hover:text-yellow-400 transition" />
+//         {notifications.length > 0 && (
+//           <span className="absolute top-0 right-0 h-3 w-3 bg-red-600 rounded-full border border-white"></span>
+//         )}
+//       </button>
+
+//       {/* Dropdown Panel */}
+//       {showDropdown && (
+//         <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-yellow-500 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+//           {notifications.length === 0 ? (
+//             <div className="p-4 text-center text-black text-sm">
+//               <BellIcon className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+//               <p>No notifications</p>
+//             </div>
+//           ) : (
+//             <ul className="divide-y divide-yellow-200">
+//               {notifications.map((note,index) => (
+//                 <li key={index} className="p-3 bg-white hover:bg-yellow-50 transition">
+//                   <div className="text-sm text-black mb-2">
+//                     {/* <strong>Message: </strong> {note.message} */}
+//                     <strong>{typeLabels[note.type] || 'Task Notification'}:</strong> {note.message}
+//                   </div>
+//                   <div className="flex justify-between gap-2">
+//                     <button
+//                       onClick={() => handleMarkAsRead(note.notification_id)}
+//                       className="bg-black text-yellow-400 px-3 py-1 rounded-md text-xs font-semibold hover:bg-gray-900"
+//                     >
+//                       Mark as Read
+//                     </button>
+//                     {note.task_id && (
+//                       <button
+//                         onClick={() => handleViewTask(note.task_id)}
+//                         className="bg-yellow-400 text-black px-3 py-1 rounded-md text-xs font-semibold hover:bg-yellow-500"
+//                       >
+//                         View Task
+//                       </button>
+//                     )}
+//                   </div>
+//                 </li>
+//               ))}
+//             </ul>
+//           )}
+//           <div
+//             onClick={() => {
+//               setShowDropdown(false);
+//               navigate('/notifications');
+//             }}
+//             className="text-center py-3 bg-black text-yellow-400 rounded-b-md cursor-pointer text-sm font-semibold hover:bg-gray-900 flex items-center justify-center"
+//           >
+//             <ArrowRightIcon className="h-4 w-4 mr-1" />
+//             View All Notifications
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default BellMenu;
+
+
+
+
+// import { useState, useRef, useEffect, useContext } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { NotificationContext } from '../context/NotificationContext';
+// import { BellIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+
+// function BellMenu() {
+//   const [showDropdown, setShowDropdown] = useState(false);
+//   const bellRef = useRef(null);
+//   const { notifications, markAsRead } = useContext(NotificationContext);
+//   const navigate = useNavigate();
+//   const [hiddenNotificationIds, setHiddenNotificationIds] = useState([]);
+
+//   // Close dropdown on outside click
+//   useEffect(() => {
+//     const handleClickOutside = (e) => {
+//       if (bellRef.current && !bellRef.current.contains(e.target)) {
+//         setShowDropdown(false);
+//       }
+//     };
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, []);
+
+//   // const handleMarkAsRead = (id) => {
+//   //   markAsRead(id);
+//   //   setShowDropdown(false);
+//   // };
+
+//   const handleMarkAsRead = async (id) => {
+//     await markAsRead(id);
+//     setHiddenNotificationIds((prev) => [...prev, id]); // Hide locally with animation
+//   };
+
+
+//   const handleViewTask = (taskId) => {
+//     setShowDropdown(false);
+//     navigate(`/tasks/${taskId}/progress`);
+//   };
+
+//   const renderNotificationMessage = (note) => {
+//     const updatesList = note.updates && Object.entries(note.updates).map(([key, value]) => {
+//       return `${key.replace(/_/g, ' ')} → ${value}`;
+//     }).join(', ');
+
+//     switch (note.type) {
+//       case 'task_created':
+//         return (
+//           <>
+//             📌 New task "<strong>{note.message}</strong>" assigned to you by <strong>{note.sender}</strong>.
+//           </>
+//         );
+//       case 'task_updated_by_creator':
+//         return (
+//           <>
+//             ✏️ Task "<strong>{note.task_title}</strong>" updated by <strong>{note.sender}</strong>.
+//             {updatesList && <div className="text-xs text-gray-700">➡️ {updatesList}</div>}
+//           </>
+//         );
+//       case 'task_updated':
+//         return (
+//           <>
+//             ✅ Your task "<strong>{note.task_title}</strong>" was updated by <strong>{note.sender}</strong>.
+//             {updatesList && <div className="text-xs text-gray-700">➡️ {updatesList}</div>}
+//           </>
+//         );
+//       case 'task_reassigned':
+//         return (
+//           <>
+//             🔄 Task "<strong>{note.message}</strong>" has been reassigned to you by <strong>{note.sender}</strong>.
+//             {updatesList && <div className="text-xs text-gray-700">➡️ {updatesList}</div>}
+//           </>
+//         );
+//       default:
+//         return (
+//           <>
+//             📢 Notification for task "<strong>{note.task_title || note.message}</strong>".
+//           </>
+//         );
+//     }
+//   };
+
+//   return (
+//     <div className="relative" ref={bellRef}>
+//       <button
+//         onClick={() => setShowDropdown(!showDropdown)}
+//         className="relative p-2 rounded-full hover:bg-yellow-100 transition"
+//       >
+//         <BellIcon className="h-6 w-6 text-black hover:text-yellow-400 transition" />
+//         {notifications.length > 0 && (
+//           <span className="absolute top-0 right-0 h-3 w-3 bg-red-600 rounded-full border border-white"></span>
+//         )}
+//       </button>
+
+//       {showDropdown && (
+//         <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-yellow-500 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+//           {notifications.length === 0 ? (
+//             <div className="p-4 text-center text-black text-sm">
+//               <BellIcon className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+//               <p>No notifications</p>
+//             </div>
+//           ) : (
+//             <ul className="divide-y divide-yellow-200">
+//               {notifications.map((note, index) => (
+//                 <li key={index} className="p-3 bg-white hover:bg-yellow-50 transition">
+//                   <div className="text-sm text-black mb-2">
+//                     {renderNotificationMessage(note)}
+//                   </div>
+//                   <div className="flex justify-between gap-2">
+//                     <button
+//                       onClick={() => handleMarkAsRead(note.notification_id)}
+//                       className="bg-black text-yellow-400 px-3 py-1 rounded-md text-xs font-semibold hover:bg-gray-900"
+//                     >
+//                       Mark as Read
+//                     </button>
+//                     {note.task_id && (
+//                       <button
+//                         onClick={() => handleViewTask(note.task_id)}
+//                         className="bg-yellow-400 text-black px-3 py-1 rounded-md text-xs font-semibold hover:bg-yellow-500"
+//                       >
+//                         View Task
+//                       </button>
+//                     )}
+//                   </div>
+//                 </li>
+//               ))}
+//             </ul>
+//           )}
+//           <div
+//             onClick={() => {
+//               setShowDropdown(false);
+//               navigate('/notifications');
+//             }}
+//             className="text-center py-3 bg-black text-yellow-400 rounded-b-md cursor-pointer text-sm font-semibold hover:bg-gray-900 flex items-center justify-center"
+//           >
+//             <ArrowRightIcon className="h-4 w-4 mr-1" />
+//             View All Notifications
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default BellMenu;
+
+
 import { useState, useRef, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NotificationContext } from '../context/NotificationContext';
@@ -444,6 +698,7 @@ import { BellIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 function BellMenu() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [hiddenNotificationIds, setHiddenNotificationIds] = useState([]);
   const bellRef = useRef(null);
   const { notifications, markAsRead } = useContext(NotificationContext);
   const navigate = useNavigate();
@@ -459,9 +714,9 @@ function BellMenu() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleMarkAsRead = (id) => {
-    markAsRead(id);
-    setShowDropdown(false);
+  const handleMarkAsRead = async (id) => {
+    setHiddenNotificationIds((prev) => [...prev, id]); // Animate hiding
+    setTimeout(() => markAsRead(id), 400); // Allow animation before re-fetch
   };
 
   const handleViewTask = (taskId) => {
@@ -469,12 +724,13 @@ function BellMenu() {
     navigate(`/tasks/${taskId}/progress`);
   };
 
-   // Notification type labels
   const typeLabels = {
-    task_created: 'Task Created',
-    task_updated: 'Task Updated',
-    task_reassigned: 'Task Re-assigned',
+    task_created: '📌 New Task',
+    task_updated: '✅ Task Updated',
+    task_updated_by_creator: '✏️ Task Edited',
+    task_reassigned: '🔁 Task Re-assigned',
   };
+
   return (
     <div className="relative" ref={bellRef}>
       {/* Bell Icon */}
@@ -498,32 +754,46 @@ function BellMenu() {
             </div>
           ) : (
             <ul className="divide-y divide-yellow-200">
-              {notifications.map((note,index) => (
-                <li key={index} className="p-3 bg-white hover:bg-yellow-50 transition">
-                  <div className="text-sm text-black mb-2">
-                    {/* <strong>Message: </strong> {note.message} */}
-                    <strong>{typeLabels[note.type] || 'Task Notification'}:</strong> {note.message}
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <button
-                      onClick={() => handleMarkAsRead(note.notification_id)}
-                      className="bg-black text-yellow-400 px-3 py-1 rounded-md text-xs font-semibold hover:bg-gray-900"
-                    >
-                      Mark as Read
-                    </button>
-                    {note.task_id && (
+              {notifications.map((note, index) => {
+                const isHidden = hiddenNotificationIds.includes(note.notification_id);
+                return (
+                  <li
+                    key={index}
+                    className={`p-3 bg-white hover:bg-yellow-50 transition-all duration-500 ease-in-out transform ${
+                      isHidden ? 'opacity-0 max-h-0 scale-y-0 overflow-hidden' : 'opacity-100 max-h-40 scale-y-100'
+                    }`}
+                  >
+                    <div className="text-sm text-black mb-2">
+                      <strong>{typeLabels[note.type] || '🔔 Notification'}:</strong>{' '}
+                      {note.message ||
+                        (note.updates &&
+                          Object.entries(note.updates)
+                            .map(([field, value]) => `${field} → ${value}`)
+                            .join(', '))}
+                    </div>
+                    <div className="flex justify-between gap-2">
                       <button
-                        onClick={() => handleViewTask(note.task_id)}
-                        className="bg-yellow-400 text-black px-3 py-1 rounded-md text-xs font-semibold hover:bg-yellow-500"
+                        onClick={() => handleMarkAsRead(note.notification_id)}
+                        className="bg-black text-yellow-400 px-3 py-1 rounded-md text-xs font-semibold hover:bg-gray-900"
                       >
-                        View Task
+                        Mark as Read
                       </button>
-                    )}
-                  </div>
-                </li>
-              ))}
+                      {note.task_id && (
+                        <button
+                          onClick={() => handleViewTask(note.task_id)}
+                          className="bg-yellow-400 text-black px-3 py-1 rounded-md text-xs font-semibold hover:bg-yellow-500"
+                        >
+                          View Task
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
+
+          {/* View All Button */}
           <div
             onClick={() => {
               setShowDropdown(false);
@@ -541,3 +811,5 @@ function BellMenu() {
 }
 
 export default BellMenu;
+
+

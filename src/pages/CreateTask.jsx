@@ -766,8 +766,14 @@ function CreateTask({ baseUrl }) {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    if (!formData.title || !formData.assigned_to) {
-      toast.error('Title and assigned user are required');
+    // if (!formData.title || !formData.assigned_to) {
+    //   toast.error('Title and assigned user are required');
+    //   setIsSubmitting(false);
+    //   return;
+    // }
+
+    if (!formData.title || !formData.assigned_to || !formData.priority || !formData.due_date) {
+      toast.error('Please fill all required fields: Title, Assign To, Priority, and Due Date.');
       setIsSubmitting(false);
       return;
     }
