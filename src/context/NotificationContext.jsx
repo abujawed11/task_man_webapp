@@ -60,26 +60,47 @@ export const NotificationProvider = ({ children, baseUrl }) => {
     }
   };
 
+  // const markAsRead = async (notificationId) => {
+  //   const token = localStorage.getItem('token');
+  //   try {
+  //     await axios.post(
+  //       `${baseUrl}/api/notifications/mark-read`,
+  //       {}, // empty body, since your backend uses the token to identify user
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+  //     // Re-fetch updated notifications
+  //     fetchNotifications();
+  //   } catch (err) {
+  //     console.error('Error marking notifications as read:', err);
+  //   }
+  // };
+
   const markAsRead = async (notificationId) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
         `${baseUrl}/api/notifications/mark-read`,
-        {}, // empty body, since your backend uses the token to identify user
+        { notificationId },  // ✅ send notificationId in body
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
-      // Re-fetch updated notifications
+      // ✅ Refresh notification list after marking as read
       fetchNotifications();
     } catch (err) {
-      console.error('Error marking notifications as read:', err);
+      console.error('Error marking notification as read:', err);
     }
   };
 
+
   useEffect(() => {
     fetchNotifications(); // initial load
-    const interval = setInterval(fetchNotifications, 5000);
+    const interval = setInterval(fetchNotifications, 1 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
