@@ -38,12 +38,14 @@
 // };
 
 
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState, useContext } from 'react';
+import { AuthContext } from './AuthContext';
 import axios from 'axios';
 
 export const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children, baseUrl }) => {
+  const { user, loading } = useContext(AuthContext); // ✅ get user and loading state
   const [notifications, setNotifications] = useState([]);
   const [unread, setUnread] = useState(0);
 
@@ -60,23 +62,6 @@ export const NotificationProvider = ({ children, baseUrl }) => {
       console.error('Error fetching notifications:', err);
     }
   };
-
-  // const markAsRead = async (notificationId) => {
-  //   const token = localStorage.getItem('token');
-  //   try {
-  //     await axios.post(
-  //       `${baseUrl}/api/notifications/mark-read`,
-  //       {}, // empty body, since your backend uses the token to identify user
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  //     // Re-fetch updated notifications
-  //     fetchNotifications();
-  //   } catch (err) {
-  //     console.error('Error marking notifications as read:', err);
-  //   }
-  // };
 
   const markAsRead = async (notificationId) => {
     const token = localStorage.getItem('token');
@@ -99,11 +84,20 @@ export const NotificationProvider = ({ children, baseUrl }) => {
   };
 
 
+  // useEffect(() => {
+  //   fetchNotifications(); // initial load
+  //   const interval = setInterval(fetchNotifications, 1 * 60 * 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  // ✅ Only fetch when user is ready (after login)
   useEffect(() => {
-    fetchNotifications(); // initial load
-    const interval = setInterval(fetchNotifications, 1 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+    if (user && !loading) {
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 2 * 60 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [user, loading]);
 
   return (
     <NotificationContext.Provider

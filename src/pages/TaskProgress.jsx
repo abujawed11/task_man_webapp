@@ -560,7 +560,7 @@ function TaskProgress({ baseUrl }) {
         });
         setUpdates(res.data.updates || []);
         setTask(res.data.task || null);
-        console.log(res.data.task)
+        // console.log(res.data.task)
       } catch (error) {
         console.error('Error fetching task updates:', error);
       }

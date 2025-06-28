@@ -1133,7 +1133,7 @@ function AllTasks({ baseUrl }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log(tasksResponse.data)
+        // console.log(tasksResponse.data)
 
         setTasks(tasksResponse.data);
         setFilteredTasks(tasksResponse.data);
