@@ -706,6 +706,13 @@ function CreateTask({ baseUrl }) {
     if (user && !loading) fetchUsers();
   }, [user, loading, baseUrl]);
 
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => stream.getTracks().forEach(t => t.stop()))
+      .catch(() => { });
+  }, []);
+
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -724,6 +731,11 @@ function CreateTask({ baseUrl }) {
         clearInterval(timerRef.current);
         setRecordingTime(0);
       };
+
+
+      // ✅ Delay to let mic warm up
+      // setIsRecording(true);
+      // await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms warm-up delay
 
       mediaRecorderRef.current.start();
       setIsRecording(true);
@@ -756,9 +768,23 @@ function CreateTask({ baseUrl }) {
     setFile(selectedFile);
   };
 
+  // const handleDeleteFile = () => {
+  //   setFile(null);
+  //   toast.success('File deleted');
+  // };
+
   const handleDeleteFile = () => {
-    setFile(null);
-    toast.success('File deleted');
+    if (window.confirm('Are you sure you want to delete the attached file?')) {
+      setFile(null);
+      toast.success('File deleted');
+    }
+  };
+
+    const handleDeleteAudio = () => {
+    if (window.confirm('Are you sure you want to delete the recorded audio?')) {
+      setAudioBlob(null);
+      toast.success('Audio recording deleted');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -899,7 +925,7 @@ function CreateTask({ baseUrl }) {
                     <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
                       <button
                         type="button"
-                        onClick={() => setAudioBlob(null)}
+                        onClick={handleDeleteAudio}
                         title="Delete Recording"
                         className="p-2 rounded-full bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black transition-transform transform hover:-translate-y-1 shadow-md hover:shadow-yellow-400 animate-float"
                       >

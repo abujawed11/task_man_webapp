@@ -336,7 +336,7 @@ function NotificationPage() {
   };
 
   const handleViewTask = (taskId) => {
-    navigate(`/tasks/${taskId}/progress`);
+    navigate(`/tasks/${taskId}/progress`,{ state: { from: 'noti' } });
   };
 
   return (
@@ -344,7 +344,7 @@ function NotificationPage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-10">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/dashboard")}
             className="flex items-center bg-black text-yellow-400 px-4 py-2 rounded-lg shadow-lg hover:bg-gray-900 transition text-sm"
           >
             ← Back
@@ -364,7 +364,8 @@ function NotificationPage() {
               .map((note, index) => (
                 <div
                   key={index}
-                  className="bg-white border border-yellow-500 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+                  // className="bg-white border border-yellow-500 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+                  className="flex flex-col justify-between h-full bg-white border border-yellow-500 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
                 >
                   <div className="bg-yellow-100 p-4 border-b border-yellow-500 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-black">Task Notification</h2>

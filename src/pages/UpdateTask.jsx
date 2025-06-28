@@ -778,7 +778,7 @@
 //                   </label>
 //                 </div>
 //               </Tilt>
-           
+
 
 //             <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} className="w-full">
 //               <div className="relative hover:shadow-yellow-400/50">
@@ -935,6 +935,13 @@ function UpdateTask({ baseUrl }) {
     fetchTask();
     fetchUsers();
   }, [taskId, baseUrl]);
+
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => stream.getTracks().forEach(t => t.stop()))
+      .catch(() => { });
+  }, []);
 
   const startRecording = async () => {
     try {

@@ -616,6 +616,7 @@ function TaskProgress({ baseUrl }) {
               if (from === 'myTasks') navigate('/tasks/my-tasks');
               else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
               else if (from === 'adminTasks') navigate('/admin/tasks/all');
+              else if (from === 'noti') navigate('/notifications');
               else navigate('/dashboard');
             }}
             className="flex items-center px-4 py-2 bg-black text-yellow-400 font-bold rounded-lg shadow-lg hover:bg-gray-900 hover:shadow-yellow-400/50 transition hover:-translate-y-[2px] animate-float mb-6"
