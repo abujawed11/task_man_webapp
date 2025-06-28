@@ -1117,6 +1117,8 @@ function AllTasks({ baseUrl }) {
     priority: '',
     due_date: '',
     created_at: '',
+    updated_at_date: '',
+    updated_at_hour: '',  // Format: '1', '2', ..., '23'
   });
   const [sortConfig, setSortConfig] = useState({
     field: 'created_at',
@@ -1179,6 +1181,42 @@ function AllTasks({ baseUrl }) {
       filtered = filtered.filter((task) => task.created_at?.slice(0, 10) === filters.created_at);
     }
 
+    // if (filters.updated_at_date) {
+    //   filtered = filtered.filter(
+    //     (task) => task.last_updated_at?.slice(0, 10) === filters.updated_at_date
+    //   );
+    // }
+
+    if (filters.updated_at_date) {
+      filtered = filtered.filter((task) => {
+        if (!task.last_updated_at) return false;
+        const taskDate = new Date(task.last_updated_at);
+        const localDateStr = taskDate.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+        return localDateStr === filters.updated_at_date;
+      });
+    }
+
+    // console.log(filteredTasks)
+
+    // if (filters.updated_at_hour !== '') {
+    //   const selectedHour = parseInt(filters.updated_at_hour);
+    //   filtered = filtered.filter((task) => {
+    //     if (!task.updated_at) return false;
+    //     const taskHour = new Date(task.updated_at).getHours();
+    //     return taskHour === selectedHour;
+    //   });
+    // }
+
+    if (filters.updated_at_hour !== '') {
+      const selectedHour = parseInt(filters.updated_at_hour);
+      filtered = filtered.filter((task) => {
+        if (!task.last_updated_at) return false;
+        const taskHour = new Date(task.last_updated_at).getHours(); // local time
+        return taskHour === selectedHour;
+      });
+    }
+
+
     // Apply sorting
     filtered.sort((a, b) => {
       const field = sortConfig.field;
@@ -1190,7 +1228,7 @@ function AllTasks({ baseUrl }) {
       } else if (field === 'status') {
         const statusMap = { Pending: 3, 'In Progress': 2, Completed: 1 };
         return (statusMap[a[field]] - statusMap[b[field]]) * order;
-      } else if (field === 'due_date' || field === 'created_at') {
+      } else if (field === 'due_date' || field === 'created_at' || field === 'last_updated_at') {
         const aDate = a[field] ? new Date(a[field]) : new Date(0);
         const bDate = b[field] ? new Date(b[field]) : new Date(0);
         return (aDate - bDate) * order;
@@ -1220,6 +1258,8 @@ function AllTasks({ baseUrl }) {
       priority: '',
       due_date: '',
       created_at: '',
+      updated_at_date: '',
+      updated_at_hour: '',
     });
   };
 
@@ -1369,6 +1409,36 @@ function AllTasks({ baseUrl }) {
                 className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Updated Date</label>
+              <input
+                type="date"
+                name="updated_at_date"
+                value={filters.updated_at_date}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-black mb-1">Updated Hour Range</label>
+              <select
+                name="updated_at_hour"
+                value={filters.updated_at_hour}
+                onChange={handleFilterChange}
+                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-yellow-500 focus:border-yellow-500"
+              >
+                <option value="">All</option>
+                {[...Array(24)].map((_, i) => (
+                  <option key={i} value={i}>
+                    Between {i % 12 === 0 ? 12 : i % 12}{i < 12 ? 'AM' : 'PM'} - {(i + 1) % 12 === 0 ? 12 : (i + 1) % 12}{(i + 1) < 12 || i === 23 ? 'AM' : 'PM'}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+
+
           </div>
         </div>
 
@@ -1431,10 +1501,12 @@ function AllTasks({ baseUrl }) {
               <option value="created_at">Created Date</option>
               <option value="created_time">Created Time</option>
               <option value="due_date">Due Date</option>
+              <option value="last_updated_at">Last Updated Time</option>
               <option value="priority">Priority</option>
               <option value="status">Status</option>
               <option value="assigned_to">Assigned To</option>
               <option value="created_by">Created By</option>
+
             </select>
 
             <select

@@ -497,17 +497,26 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
+import {
+  FunnelIcon,
+  AdjustmentsVerticalIcon,
+  XMarkIcon
+} from '@heroicons/react/24/solid';
+import { motion, AnimatePresence } from 'framer-motion'; // <-- Add to imports
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
 import { downloadTaskExcel } from '../utils/downloadExcel';
-import FilterMenu from '../components/FilterMenu';
-import SortMenu from '../components/SortMenu';
+import TaskFilterMenu from '../components/TaskFilterMenu';
+import TaskSortMenu from '../components/TaskSortMenu';
+import useFilteredSortedTasks from '../hooks/useFilteredSortedTasks';
+
 
 function MyTasks({ baseUrl }) {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -517,6 +526,17 @@ function MyTasks({ baseUrl }) {
         const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+      //   console.log('Fetched tasks:', response.data.map(t => ({
+      //   task_id: t.task_id,
+      //   last_updated_at: t.last_updated_at,
+      //   parsed: new Date(t.last_updated_at),
+      // })));
+
+        const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(usersResponse.data);
         // console.log(response.data)
         setTasks(response.data);
       } catch (error) {
@@ -534,60 +554,41 @@ function MyTasks({ baseUrl }) {
     }));
   };
 
-  // const handleDownload = async (mode, username) => {
-  //   console.log(mode,username)
-  //   try {
-  //     const response = await axios.get(`${baseUrl}/api/tasks/export`, {
-  //       params: { mode, username },
-  //       responseType: 'blob',
-  //     });
+  const [filters, setFilters] = useState({
+    assigned_by: '',
+    created_by: '',
+    status: '',
+    priority: '',
+    due_date: '',
+    created_at: '',
+    last_updated_at_date: '',
+  });
 
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     const fileName = mode + "Task";
-  //     link.setAttribute('download', `${fileName}.xlsx`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   } catch (err) {
-  //     console.error('Download failed', err);
-  //   }
-  // };
+  // const [sortConfig, setSortConfig] = useState({
+  //   field: 'created_at',
+  //   order: 'DESC',
+  // });
+  // ✅ Paste here:
+  const [sortConfig, setSortConfig] = useState({
+    field: '',     // or 'created_at'
+    order: '',     // or 'DESC'
+  });
 
-  // const handleDownload = async (mode, username) => {
-  //   try {
-  //     const response = await axios.get(`${baseUrl}/api/tasks/export`, {
-  //       params: { mode, username },
-  //       responseType: 'blob',
-  //     });
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showSortMenu, setShowSortMenu] = useState(false);
 
-  //     // Get current date & time
-  //     const now = new Date();
-  //     const dd = String(now.getDate()).padStart(2, '0');
-  //     const mm = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-  //     const yy = String(now.getFullYear()).slice(-2);
-  //     const hh = String(now.getHours()).padStart(2, '0');
-  //     const min = String(now.getMinutes()).padStart(2, '0');
-
-  //     const fileName = `${mode}task_${dd}_${mm}_${yy}_${hh}_${min}.xlsx`;
-
-  //     // Trigger download
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     link.setAttribute('download', fileName);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.remove();
-  //   } catch (err) {
-  //     console.error('Download failed', err);
-  //   }
-  // };
-
+  // states
+  // const [filters, setFilters] = useState({ assigned_by: '', ... });
+  // const [sortConfig, setSortConfig] = useState({ field: 'created_at', order: 'DESC' });
+  // const [showFilterMenu, setShowFilterMenu] = useState(false);
+  // const [showSortMenu, setShowSortMenu] = useState(false);
 
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading...</div>;
   }
+
+  const filteredSortedTasks = useFilteredSortedTasks(tasks, filters, sortConfig);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative">
@@ -604,36 +605,83 @@ function MyTasks({ baseUrl }) {
       </div>
       <h1 className="text-3xl text-center font-bold text-black mb-10">My Tasks</h1>
 
-      {/* <button
-        onClick={handleDownload}
-        className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-500 hover:shadow-lg transition"
-      >
-        <ArrowDownTrayIcon className="h-5 w-5" />
-        Download Tasks
-      </button> */}
-
-      <div className="flex justify-end max-w-7xl mx-auto mb-6 px-2">
-
-        {/* <div className="flex gap-4">
-          <FilterMenu />
-          <SortMenu />
-        </div> */}
+      <div className="flex flex-wrap justify-end items-center gap-4 max-w-7xl mx-auto px-2 mb-6 relative">
         <button
-          // onClick={() => handleDownload('my', user.username)}
           onClick={() => downloadTaskExcel({ baseUrl, mode: 'my', username: user.username })}
-          className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-500 hover:shadow-lg transition cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow hover:bg-yellow-500 transition"
         >
           <ArrowDownTrayIcon className="h-5 w-5" />
-          Download My Tasks(.xlsx)
+          Download My Tasks (.xlsx)
         </button>
-      </div>
 
+        <button
+          onClick={() => setShowFilterMenu(!showFilterMenu)}
+          className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow hover:bg-yellow-500 transition"
+        >
+          <FunnelIcon className="h-5 w-5" />
+          Filter
+        </button>
+
+        <button
+          onClick={() => setShowSortMenu(!showSortMenu)}
+          className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow hover:bg-yellow-500 transition"
+        >
+          <AdjustmentsVerticalIcon className="h-5 w-5" />
+          Sort
+        </button>
+        <AnimatePresence>
+          {showFilterMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-7xl mx-auto overflow-hidden"
+            >
+              <div className="bg-white border border-yellow-500 rounded-xl shadow-md p-6 mb-6">
+                <TaskFilterMenu
+                  filters={filters}
+                  setFilters={setFilters}
+                  onClose={() => setShowFilterMenu(false)}
+                  users={users}
+                  pageType="myTasks"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showSortMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-7xl mx-auto overflow-hidden"
+            >
+              <TaskSortMenu
+                sortConfig={sortConfig}
+                setSortConfig={setSortConfig}
+                onClose={() => setShowSortMenu(false)}
+                onSortClick={() => {
+                  // Optionally refetch or trigger useFilteredSortedTasks
+                  // setShowSortMenu(false);
+                  setSortConfig({ ...sortConfig }); 
+                }}
+                baseUrl={baseUrl}
+                user={user}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
       <div className="max-w-7xl mx-auto">
         {tasks.length === 0 ? (
           <p className="text-black text-center text-lg">No tasks assigned to you.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tasks.map((task) => (
+            {/* {tasks.map((task) => (
               <TaskCard
                 key={task.task_id}
                 task={task}
@@ -642,7 +690,53 @@ function MyTasks({ baseUrl }) {
                 toggleDescription={toggleDescription}
                 location="myTasks"
               />
-            ))}
+            ))} */}
+            {/* {filteredSortedTasks.map((task) => (
+              <TaskCard
+                key={task.task_id}
+                task={task}
+                baseUrl={baseUrl}
+                expanded={expandedDescriptions[task.task_id]}
+                toggleDescription={toggleDescription}
+                location="myTasks"
+              />
+            ))} */}
+
+            {filteredSortedTasks.length === 0 ? (
+              <div className="flex flex-col items-center justify-center text-center text-gray-600 py-12 col-span-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-16 w-16 mb-4 text-yellow-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9.75 9.75h.008v.008H9.75V9.75zm.75 3h2v2h-2v-2zM4.5 4.5l15 15m0 0L4.5 4.5M12 2.25a9.75 9.75 0 011.17 19.4m0 0A9.75 9.75 0 0112 2.25z"
+                  />
+                </svg>
+                <p className="text-lg font-semibold text-black">No tasks found</p>
+                <p className="text-sm text-gray-500">Try adjusting your filters or sorting options.</p>
+              </div>
+            ) : (
+              <>
+                {filteredSortedTasks.map((task,index) => (
+                  <TaskCard
+                    key={index}
+                    task={task}
+                    baseUrl={baseUrl}
+                    expanded={expandedDescriptions[task.task_id]}
+                    toggleDescription={toggleDescription}
+                    location="myTasks"
+                  />
+                ))}
+          </>
+            )}
+
+
           </div>
         )}
       </div>

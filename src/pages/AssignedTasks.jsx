@@ -368,7 +368,7 @@ function AssignedTasks({ baseUrl }) {
         const response = await axios.get(`${baseUrl}/api/tasks/created-by-me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // console.log(response.data)
+        console.log(response.data)
         setTasks(response.data);
       } catch (error) {
         toast.error('Failed to load tasks');
@@ -384,26 +384,6 @@ function AssignedTasks({ baseUrl }) {
       [taskId]: !prev[taskId],
     }));
   };
-
-  // const handleDownload = async (mode, username) => {
-  //   console.log(mode, username)
-  //   try {
-  //     const response = await axios.get(`${baseUrl}/api/tasks/export`, {
-  //       params: { mode, username },
-  //       responseType: 'blob',
-  //     });
-
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     const fileName = mode + "Task";
-  //     link.setAttribute('download', `${fileName}.xlsx`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   } catch (err) {
-  //     console.error('Download failed', err);
-  //   }
-  // };
 
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading tasks
