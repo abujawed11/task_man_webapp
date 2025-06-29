@@ -497,11 +497,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
-import {
-  FunnelIcon,
-  AdjustmentsVerticalIcon,
-  XMarkIcon
-} from '@heroicons/react/24/solid';
+import { FunnelIcon, AdjustmentsVerticalIcon} from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion'; // <-- Add to imports
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
@@ -516,7 +512,7 @@ function MyTasks({ baseUrl }) {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-  const [users, setUsers] = useState([]);
+  
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -527,11 +523,11 @@ function MyTasks({ baseUrl }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-      //   console.log('Fetched tasks:', response.data.map(t => ({
-      //   task_id: t.task_id,
-      //   last_updated_at: t.last_updated_at,
-      //   parsed: new Date(t.last_updated_at),
-      // })));
+        //   console.log('Fetched tasks:', response.data.map(t => ({
+        //   task_id: t.task_id,
+        //   last_updated_at: t.last_updated_at,
+        //   parsed: new Date(t.last_updated_at),
+        // })));
 
         const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -554,6 +550,9 @@ function MyTasks({ baseUrl }) {
     }));
   };
 
+
+  //------Filter and Sort Logic---------------------------
+  const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     assigned_by: '',
     created_by: '',
@@ -564,11 +563,6 @@ function MyTasks({ baseUrl }) {
     last_updated_at_date: '',
   });
 
-  // const [sortConfig, setSortConfig] = useState({
-  //   field: 'created_at',
-  //   order: 'DESC',
-  // });
-  // ✅ Paste here:
   const [sortConfig, setSortConfig] = useState({
     field: '',     // or 'created_at'
     order: '',     // or 'DESC'
@@ -576,19 +570,14 @@ function MyTasks({ baseUrl }) {
 
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const filteredSortedTasks = useFilteredSortedTasks(tasks, filters, sortConfig);
 
-  // states
-  // const [filters, setFilters] = useState({ assigned_by: '', ... });
-  // const [sortConfig, setSortConfig] = useState({ field: 'created_at', order: 'DESC' });
-  // const [showFilterMenu, setShowFilterMenu] = useState(false);
-  // const [showSortMenu, setShowSortMenu] = useState(false);
+  //---------------upto this is a filter logig----------------------------------------------
+
 
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center text-black">Loading...</div>;
   }
-
-  const filteredSortedTasks = useFilteredSortedTasks(tasks, filters, sortConfig);
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative">
@@ -667,7 +656,7 @@ function MyTasks({ baseUrl }) {
                 onSortClick={() => {
                   // Optionally refetch or trigger useFilteredSortedTasks
                   // setShowSortMenu(false);
-                  setSortConfig({ ...sortConfig }); 
+                  setSortConfig({ ...sortConfig });
                 }}
                 baseUrl={baseUrl}
                 user={user}
@@ -723,7 +712,17 @@ function MyTasks({ baseUrl }) {
               </div>
             ) : (
               <>
-                {filteredSortedTasks.map((task,index) => (
+                {/* {filteredSortedTasks.map((task,index) => (
+                  <TaskCard
+                    key={index}
+                    task={task}
+                    baseUrl={baseUrl}
+                    expanded={expandedDescriptions[task.task_id]}
+                    toggleDescription={toggleDescription}
+                    location="myTasks"
+                  />
+                ))} */}
+                {[...filteredSortedTasks].reverse().map((task, index) => (
                   <TaskCard
                     key={index}
                     task={task}
@@ -733,7 +732,8 @@ function MyTasks({ baseUrl }) {
                     location="myTasks"
                   />
                 ))}
-          </>
+
+              </>
             )}
 
 

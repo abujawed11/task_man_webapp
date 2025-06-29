@@ -646,7 +646,7 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
               </div>
               {update.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={`${baseUrl}/${update.file_path}`}
                     alt="Attachment"
                     className="max-w-full h-40 object-cover rounded-md"
@@ -657,8 +657,20 @@ function TaskUpdateCard({ update, baseUrl, assigned_to }) {
                     rel="noopener noreferrer"
                     className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800 transition"
                   >
-                    Download
+                    Open
+                  </a> */}
+                  <a
+                    href={`${baseUrl}/${update.file_path}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`${baseUrl}/${update.file_path}`}
+                      alt="Attachment"
+                      className="max-w-full h-40 object-cover rounded-md cursor-pointer hover:opacity-90 transition"
+                    />
                   </a>
+
                 </div>
               ) : (
                 <a

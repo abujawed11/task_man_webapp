@@ -625,19 +625,6 @@ function TaskProgress({ baseUrl }) {
             Back
           </button>
         </Tilt>
-        {/* <button
-          type="button"
-          onClick={() => {
-            if (from === 'myTasks') navigate('/tasks/my-tasks');
-            else if (from === 'assignedTasks') navigate('/tasks/assigned-by-me');
-            else if (from === 'adminTasks') navigate('/admin/tasks/all');
-            else navigate('/dashboard');
-          }}
-          className="ml-[-10px] mb-6 flex items-center bg-yellow-300 text-black px-4 py-2 rounded-lg shadow-md hover:shadow-yellow-500/70 hover:-translate-y-[2px] transition-all font-semibold"
-        >
-          <ArrowLeftIcon className="h-5 w-5 mr-2" />
-          Back
-        </button> */}
 
         {/* Header */}
         <h2 className="text-3xl font-bold text-black mb-8 text-center">Task Progress</h2>
@@ -649,88 +636,107 @@ function TaskProgress({ baseUrl }) {
             <div className="mb-12 relative">
               <div className="absolute w-5 h-5 bg-blue-500 rounded-full left-[-22px] top-3 border-2 border-white shadow-md"></div>
               <div className="bg-white border border-blue-500 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300">
-                {/* Updated Header */}
+
+                {/* Header */}
                 <div className="bg-yellow-400 p-4 rounded-t-lg border-b border-yellow-500">
                   <h3 className="text-xl font-bold text-black truncate">{task.title}</h3>
                 </div>
 
                 <div className="p-4 space-y-3">
                   <p className="text-black text-sm">{task.description || 'No description'}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                    <div className="flex items-center">
-                      <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Created By: {task.created_by}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Assigned To: {task.assigned_to}</span>
-                    </div>
-                    <div className="flex items-center">
-                      {getStatusIcon(task.status)}
-                      <span className="ml-2">Status: {task.status}</span>
-                    </div>
-                    <div className="flex items-center">
-                      {getPriorityIcon(task.priority)}
-                      <span className="ml-2">Priority: {task.priority}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Due: {formatDate(task.due_date)}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
-                      <span>Created: {formatDate(task.created_at)}</span>
-                    </div>
-                    {/* Audio Note */}
-                    {task.audio_path && (
-                      <div className="mt-4">
-                        <div className="flex items-center mb-2">
-                          <span className="font-medium text-sm text-black">Audio Note:</span>
-                        </div>
-                        <audio controls src={`${baseUrl}/${task.audio_path}`} className="w-full max-w-xs" />
-                      </div>
-                    )}
 
-                    {/* Attached File */}
-                    {task.file_path && (
-                      <div className="mt-4">
-                        <div className="flex items-center mb-2">
-                          <span className="font-medium text-sm text-black">Attached File:</span>
-                        </div>
-                        {task.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
-                          <div className="relative">
-                            <img
-                              src={`${baseUrl}/${task.file_path}`}
-                              alt="Task attachment"
-                              className="max-w-full h-40 object-cover rounded-md"
-                            />
-                            <a
-                              href={`${baseUrl}/${task.file_path}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded-md text-xs hover:bg-gray-800"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        ) : (
-                          <a
-                            href={`${baseUrl}/${task.file_path}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-yellow-500 hover:text-yellow-600 text-sm"
-                          >
-                            Download {task.file_path.split('/').pop()}
-                          </a>
-                        )}
+                  {/* Info Grid */}
+                  {/* Info Section using Flex Layout to prevent right-side gap */}
+                  <div className="flex flex-col sm:flex-row justify-between text-sm gap-8 w-full">
+                    {/* Left Column */}
+                    <div className="flex flex-col gap-2 w-full sm:w-1/2">
+                      <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
+                        <span>Created By: {task.created_by}</span>
                       </div>
-                    )}
+                      <div className="flex items-center">
+                        {getStatusIcon(task.status)}
+                        <span className="ml-2">Status: {task.status}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
+                        <span>Due: {formatDate(task.due_date)}</span>
+                      </div>
+                    </div>
 
+                    {/* Right Column */}
+                    <div className="flex flex-col gap-2 w-full sm:w-1/2">
+                      <div className="flex items-center">
+                        <UserIcon className="h-5 w-5 text-blue-500 mr-2" />
+                        <span>Assigned To: {task.assigned_to}</span>
+                      </div>
+                      <div className="flex items-center">
+                        {getPriorityIcon(task.priority)}
+                        <span className="ml-2">Priority: {task.priority}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CalendarIcon className="h-5 w-5 text-blue-500 mr-2" />
+                        <span>Created: {formatDate(task.created_at)}</span>
+                      </div>
+                    </div>
                   </div>
+
+
+                  {/* Audio and File in a single row */}
+                  {(task.audio_path || task.file_path) && (
+                    <div className="mt-4 w-full">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4 w-full">
+
+                        {/* Audio Note */}
+                        {task.audio_path && (
+                          <div className="flex flex-col w-full sm:w-1/2">
+                            <span className="font-medium text-sm text-black mb-1">Audio Note:</span>
+                            <audio
+                              controls
+                              src={`${baseUrl}/${task.audio_path}`}
+                              className="w-full"
+                            />
+                          </div>
+                        )}
+
+                        {/* Attached File */}
+                        {task.file_path && (
+                          <div className="flex flex-col w-full sm:w-1/2">
+                            <span className="font-medium text-sm text-black mb-1">Attached File:</span>
+                            {task.file_path.match(/\.(jpg|jpeg|png)$/i) ? (
+                              <a
+                                href={`${baseUrl}/${task.file_path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <img
+                                  src={`${baseUrl}/${task.file_path}`}
+                                  alt="Task Attachment"
+                                  className="w-full h-40 object-cover rounded-md cursor-pointer hover:opacity-90 transition"
+                                />
+                              </a>
+                            ) : (
+                              <a
+                                href={`${baseUrl}/${task.file_path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-yellow-500 hover:text-yellow-600 text-sm underline"
+                              >
+                                Download {task.file_path.split('/').pop()}
+                              </a>
+                            )}
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               </div>
             </div>
           )}
+
 
           {/* Update Cards */}
           {(updates.length > 1) ? (
@@ -752,27 +758,6 @@ function TaskProgress({ baseUrl }) {
             </div>
           )}
 
-          {/* {updates.length > 0 ? (
-            [...updates].reverse().map((update, index) => (
-              // <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
-              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to}/>
-            ))
-          ) : (
-            <div className="text-center text-black text-sm mt-8">
-              <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
-              <p>No updates yet for this task.</p>
-            </div>
-          )} */}
-          {/* {updates.length > 0 ? (
-            updates.map((update, index) => (
-              <TaskUpdateCard key={index} update={update} baseUrl={baseUrl} assigned_to={task.assigned_to} />
-            ))
-          ) : (
-            <div className="text-center text-black text-sm mt-8">
-              <DocumentIcon className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
-              <p>No updates yet for this task.</p>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

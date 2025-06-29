@@ -1098,7 +1098,6 @@ import {
   ArrowDownTrayIcon
 } from '@heroicons/react/24/solid';
 import TaskCard from '../components/TaskCard';
-import TaskFilterSort from '../components/TaskFilterSort';
 import Tilt from 'react-parallax-tilt';
 import { downloadTaskExcel } from '../utils/downloadExcel';
 
@@ -1549,7 +1548,7 @@ function AllTasks({ baseUrl }) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTasks.map((task) => (
+            {/* {filteredTasks.map((task) => (
               <TaskCard
                 key={task.task_id}
                 task={task}
@@ -1558,7 +1557,18 @@ function AllTasks({ baseUrl }) {
                 toggleDescription={toggleDescription}
                 location="adminTasks"
               />
+            ))} */}
+            {[...filteredTasks].reverse().map((task,index) => (
+              <TaskCard
+                key={index}
+                task={task}
+                baseUrl={baseUrl}
+                expanded={expandedDescriptions[task.task_id]}
+                toggleDescription={toggleDescription}
+                location="adminTasks"
+              />
             ))}
+
           </div>
         )}
       </div>

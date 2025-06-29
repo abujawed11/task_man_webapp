@@ -1014,7 +1014,7 @@ function UpdateTask({ baseUrl }) {
         },
       });
       toast.success('Task updated');
-      navigate('/dashboard');
+      navigate(-1);
     } catch {
       toast.error('Update failed');
     }
@@ -1148,7 +1148,7 @@ function UpdateTask({ baseUrl }) {
               </>
             )}
 
-            {isAssignee && (
+            {/* {isAssignee && ( */}
               <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} className="w-full">
                 <div className="relative hover:shadow-yellow-400/50">
                   <select
@@ -1166,7 +1166,7 @@ function UpdateTask({ baseUrl }) {
                   </label>
                 </div>
               </Tilt>
-            )}
+            
 
             <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} className="w-full">
               <div className="relative hover:shadow-yellow-400/50">

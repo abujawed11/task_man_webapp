@@ -9,6 +9,10 @@ const useFilteredSortedTasks = (tasks, filters, sortConfig) => {
             filteredTasks = filteredTasks.filter(t => t.assigned_by === filters.assigned_by);
         }
 
+        if (filters.assigned_to) {
+            filteredTasks = filteredTasks.filter((task) => task.assigned_to === filters.assigned_to);
+        }
+
         if (filters.created_by) {
             filteredTasks = filteredTasks.filter(t => t.created_by === filters.created_by);
         }
@@ -40,19 +44,19 @@ const useFilteredSortedTasks = (tasks, filters, sortConfig) => {
         }
 
         if (filters.updated_hour_range) {
-          const hours = parseInt(filters.updated_hour_range, 10);
-          const threshold = new Date(Date.now() - hours * 60 * 60 * 1000);
+            const hours = parseInt(filters.updated_hour_range, 10);
+            const threshold = new Date(Date.now() - hours * 60 * 60 * 1000);
 
-          filteredTasks = filteredTasks.filter(t => {
-            const updatedAt = new Date(t.updated_at);
-            return updatedAt >= threshold;
-          });
+            filteredTasks = filteredTasks.filter(t => {
+                const updatedAt = new Date(t.updated_at);
+                return updatedAt >= threshold;
+            });
 
-          // Optional debug logs
-        //   console.log('Updated Hour Filter Active:', hours, 'hr ago');
-        //   console.log('Now:', new Date());
-        //   console.log('Threshold:', threshold);
-        //   console.log('After hour filtering:', filteredTasks.length);
+            // Optional debug logs
+            //   console.log('Updated Hour Filter Active:', hours, 'hr ago');
+            //   console.log('Now:', new Date());
+            //   console.log('Threshold:', threshold);
+            //   console.log('After hour filtering:', filteredTasks.length);
         }
 
 
