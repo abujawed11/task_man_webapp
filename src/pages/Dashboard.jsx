@@ -496,28 +496,6 @@ function Dashboard({ baseUrl }) {
             <Bar data={barData} options={barOptions} />
           </div>
         </section>
-
-        {/* Admin Panel */}
-        {/* {user?.accountType === 'Super Admin' && (
-          <section className="mb-8 mt-12">
-            <h2 className="text-2xl font-extrabold text-black mb-6 tracking-wide">Admin Panel</h2>
-            <div className="bg-yellow-200 p-6 rounded-lg shadow-md border border-yellow-300">
-              <p className="text-black mb-4 font-medium leading-relaxed">Manage users and system settings.</p>
-              <NavLink
-                to="/admin/tasks/all"
-                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 mr-2 card-hover"
-              >
-                Manage All Tasks
-              </NavLink>
-              <NavLink
-                to="/admin/invite-codes"
-                className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 card-hover"
-              >
-                Generate Invite Codes
-              </NavLink>
-            </div>
-          </section>
-        )} */}
       </div>
     </div>
   );
