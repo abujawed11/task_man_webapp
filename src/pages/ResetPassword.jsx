@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
@@ -8,9 +8,7 @@ import mascot from '../assets/mascot.json';
 import Tilt from 'react-parallax-tilt';
 
 function ResetPassword({ baseUrl }) {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const token = searchParams.get('token');
 
   const [formData, setFormData] = useState({
     newPassword: '',
@@ -21,13 +19,22 @@ function ResetPassword({ baseUrl }) {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
 
   useEffect(() => {
-    if (!token) {
-      toast.error('Invalid reset link');
-      navigate('/login');
+    // Get email and OTP from localStorage (set by ForgotPassword component)
+    const resetEmail = localStorage.getItem('resetPasswordEmail');
+    const resetOtp = localStorage.getItem('resetPasswordOtp');
+    
+    if (!resetEmail || !resetOtp) {
+      toast.error('Invalid reset session. Please start over.');
+      navigate('/forgot-password');
+    } else {
+      setEmail(resetEmail);
+      setOtp(resetOtp);
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,9 +73,14 @@ function ResetPassword({ baseUrl }) {
 
     try {
       await axios.post(`${baseUrl}/api/auth/reset-password`, {
-        token,
+        email,
+        otp,
         newPassword: formData.newPassword
       });
+
+      // Clear localStorage after successful reset
+      localStorage.removeItem('resetPasswordEmail');
+      localStorage.removeItem('resetPasswordOtp');
 
       setIsSuccess(true);
       toast.success('Password reset successfully!');
