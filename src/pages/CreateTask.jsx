@@ -1,7 +1,7 @@
 // import { useState, useEffect, useRef, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { MicrophoneIcon, PaperClipIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 
@@ -40,7 +40,7 @@
 //   //     try {
 //   //       const token = localStorage.getItem('token');
 //   //       if (!token) throw new Error('No token found');
-//   //       const response = await axios.get(`${baseUrl}/api/users/list`, {
+//   //       const response = await axiosInstance.get(`${baseUrl}/api/users/list`, {
 //   //         headers: { Authorization: `Bearer ${token}` },
 //   //       });
 //   //       setUsers(response.data);
@@ -58,7 +58,7 @@
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
 
-//         const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 
@@ -157,7 +157,7 @@
 //       if (audioBlob) data.append('audio', audioBlob, `audio-note.${audioBlob.type.split('/')[1]}`);
 //       if (file) data.append('file', file);
 
-//       await axios.post(`${baseUrl}/api/tasks/create`, data, {
+//       await axiosInstance.post(`${baseUrl}/api/tasks/create`, data, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //           'Content-Type': 'multipart/form-data',
@@ -390,7 +390,7 @@
 // import { useState, useEffect, useRef, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { MicrophoneIcon, PaperClipIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 // import Tilt from 'react-parallax-tilt';
@@ -420,7 +420,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
-//         const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(response.data);
@@ -500,7 +500,7 @@
 //       if (audioBlob) data.append('audio', audioBlob, `audio-note.${audioBlob.type.split('/')[1]}`);
 //       if (file) data.append('file', file);
 
-//       await axios.post(`${baseUrl}/api/tasks/create`, data, {
+//       await axiosInstance.post(`${baseUrl}/api/tasks/create`, data, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //           'Content-Type': 'multipart/form-data',
@@ -665,7 +665,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import { MicrophoneIcon, PaperClipIcon, TrashIcon } from '@heroicons/react/24/solid';
 import Tilt from 'react-parallax-tilt';
@@ -695,7 +695,7 @@ function CreateTask({ baseUrl }) {
       try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found');
-        const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+        const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(response.data);
@@ -812,7 +812,7 @@ function CreateTask({ baseUrl }) {
       if (audioBlob) data.append('audio', audioBlob, `audio-note.${audioBlob.type.split('/')[1]}`);
       if (file) data.append('file', file);
 
-      await axios.post(`${baseUrl}/api/tasks/create`, data, {
+      await axiosInstance.post(`${baseUrl}/api/tasks/create`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

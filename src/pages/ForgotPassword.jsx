@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { ArrowLeft, Mail } from 'lucide-react';
 import Lottie from 'lottie-react';
 import mascot from '../assets/mascot.json';
@@ -34,7 +34,7 @@ function ForgotPassword({ baseUrl }) {
     setIsLoading(true);
 
     try {
-      await axios.post(`${baseUrl}/api/auth/forgot-password`, { email });
+      await axiosInstance.post('/api/auth/forgot-password', { email });
       setIsEmailSent(true);
       toast.success('OTP sent to your email successfully!');
     } catch (error) {

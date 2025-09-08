@@ -312,6 +312,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NotificationContext } from '../context/NotificationContext';
+import { formatDate, formatDateTime, isOverdue } from '../utils/dateUtils';
 
 function NotificationPage() {
   const navigate = useNavigate();
@@ -319,16 +320,16 @@ function NotificationPage() {
 
   const [hiddenNotificationIds, setHiddenNotificationIds] = useState([]);
 
-  const formatDateTime = (dateStr) => {
-    if (!dateStr) return 'N/A';
-    const date = new Date(dateStr);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, '0');
-    return `${formattedHours}:${formattedMinutes} ${ampm} | ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
+  // const formatDateTime = (dateStr) => {
+  //   if (!dateStr) return 'N/A';
+  //   const date = new Date(dateStr);
+  //   const hours = date.getHours();
+  //   const minutes = date.getMinutes();
+  //   const ampm = hours >= 12 ? 'PM' : 'AM';
+  //   const formattedHours = hours % 12 || 12;
+  //   const formattedMinutes = minutes.toString().padStart(2, '0');
+  //   return `${formattedHours}:${formattedMinutes} ${ampm} | ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  // };
 
   const handleMarkAsRead = (id) => {
     markAsRead(id);

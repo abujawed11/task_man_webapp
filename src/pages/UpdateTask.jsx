@@ -1,6 +1,6 @@
 // import { useEffect, useState, useContext } from 'react';
 // import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { AuthContext } from '../context/AuthContext';
 
@@ -20,7 +20,7 @@
 //   const fetchTask = async () => {
 //     try {
 //       const token = localStorage.getItem('token');
-//       const res = await axios.get(`${baseUrl}/api/tasks/${taskId}`, {
+//       const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}`, {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setTask(res.data);
@@ -155,7 +155,7 @@
 
 // import { useEffect, useState, useContext } from 'react';
 // import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { AuthContext } from '../context/AuthContext';
 // import { MicrophoneIcon, PaperClipIcon } from '@heroicons/react/24/solid';
@@ -189,7 +189,7 @@
 //     const fetchTask = async () => {
 //         try {
 //             const token = localStorage.getItem('token');
-//             const res = await axios.get(`${baseUrl}/api/tasks/${taskId}`, {
+//             const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}`, {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             console.log(res.data)
@@ -210,7 +210,7 @@
 //             const token = localStorage.getItem('token');
 //             if (!token) throw new Error('No token found');
 
-//             const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+//             const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             setUsers(response.data);
@@ -462,7 +462,7 @@
 
 // import { useEffect, useState, useContext } from 'react';
 // import { useParams, useNavigate, useLocation } from 'react-router-dom';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { AuthContext } from '../context/AuthContext';
 // import { MicrophoneIcon, PaperClipIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
@@ -496,7 +496,7 @@
 //     const fetchTask = async () => {
 //       try {
 //         const token = localStorage.getItem('token');
-//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}`, {
+//         const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setTask(res.data);
@@ -523,7 +523,7 @@
 //     const fetchUsers = async () => {
 //       try {
 //         const token = localStorage.getItem('token');
-//         const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(response.data);
@@ -863,7 +863,7 @@
 
 import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthContext';
 import { MicrophoneIcon, PaperClipIcon, ArrowLeftIcon, TrashIcon } from '@heroicons/react/24/solid';
@@ -897,7 +897,7 @@ function UpdateTask({ baseUrl }) {
     const fetchTask = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`${baseUrl}/api/tasks/${taskId}`, {
+        const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTask(res.data);
@@ -923,7 +923,7 @@ function UpdateTask({ baseUrl }) {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${baseUrl}/api/tasks/list`, {
+        const response = await axiosInstance.get(`${baseUrl}/api/tasks/list`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(response.data);
@@ -1007,7 +1007,7 @@ function UpdateTask({ baseUrl }) {
       if (audioBlob) formData.append('audio', audioBlob);
       if (file) formData.append('file', file);
 
-      await axios.put(`${baseUrl}/api/tasks/${taskId}/update`, formData, {
+      await axiosInstance.put(`${baseUrl}/api/tasks/${taskId}/update`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

@@ -1,6 +1,6 @@
 // import { createContext, useState, useEffect } from 'react';
 // import { toast } from 'react-toastify';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 
 // export const AuthContext = createContext();
 
@@ -23,7 +23,7 @@
 //       const token = localStorage.getItem('token');
 //       if (token) {
 //         try {
-//           const response = await axios.get(`${baseUrl}/api/auth/me`, {
+//           const response = await axiosInstance.get(`${baseUrl}/api/auth/me`, {
 //             headers: { Authorization: `Bearer ${token}` },
 //           });
 //           setUser(response.data); // Set user data from /api/auth/me
@@ -72,34 +72,39 @@
 
 import { createContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ You had this already
+  const [loading, setLoading] = useState(true);
 
+  // Automatic logout function (called by axios interceptor)
+  const autoLogout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('resetPasswordEmail');
+    localStorage.removeItem('resetPasswordOtp');
+  };
 
-  // const baseUrl = 'http://localhost:5000';
-  const baseUrl = import.meta.env.VITE_API_BASEURL;
+  // Make autoLogout globally available for axios interceptor
+  window.authLogout = autoLogout;
 
   useEffect(() => {
     const restoreSession = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get(`${baseUrl}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setUser(response.data); // ✅ set the user object
+          const response = await axiosInstance.get('/api/auth/me');
+          setUser(response.data);
         } catch (error) {
           console.error('Failed to restore session:', error);
-          localStorage.removeItem('token');
-          toast.error('Session expired. Please log in again.');
+          // axios interceptor will handle the logout automatically
         }
       }
-      setLoading(false); // ✅ Tell the app we're done loading
+      setLoading(false);
     };
     restoreSession();
   }, []);
@@ -116,15 +121,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('token', token);
   };
 
+  // Manual logout function
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('resetPasswordEmail');
+    localStorage.removeItem('resetPasswordOtp');
     toast.success('Logout successful!');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loading, autoLogout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -135,7 +143,7 @@ export const AuthProvider = ({ children }) => {
 
 
 // import { createContext, useState, useEffect } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 
 // export const AuthContext = createContext();
@@ -151,7 +159,7 @@ export const AuthProvider = ({ children }) => {
 //       const token = localStorage.getItem('token');
 //       if (token) {
 //         try {
-//           const response = await axios.get(`${baseUrl}/api/auth/me`, {
+//           const response = await axiosInstance.get(`${baseUrl}/api/auth/me`, {
 //             headers: { Authorization: `Bearer ${token}` },
 //           });
 //           setUser(response.data); // Set user data from /api/auth/me
@@ -169,7 +177,7 @@ export const AuthProvider = ({ children }) => {
 //    // Login function
 //   const login = async (username, password) => {
 //     try {
-//       const response = await axios.post(`${baseUrl}/api/auth/login`, { username, password });
+//       const response = await axiosInstance.post(`${baseUrl}/api/auth/login`, { username, password });
 //       const { token, user } = response.data;
 //       localStorage.setItem('token', token);
 //       setUser(user);

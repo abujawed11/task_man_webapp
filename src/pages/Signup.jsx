@@ -3,7 +3,7 @@
 // //import { AuthContext } from '../context/AuthContext.jsx';
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 
 // function Signup({baseUrl}) {
 //   const [formData, setFormData] = useState({
@@ -65,7 +65,7 @@
 //       // toast.success('Registration successful!');
 //       // navigate('/login');
 //       // console.log("Signing Up......")
-//       const response = await axios.post(`${baseUrl}/api/auth/signup`, {
+//       const response = await axiosInstance.post(`${baseUrl}/api/auth/signup`, {
 //         username: formData.username,
 //         email: formData.email,
 //         phoneNumber: formData.phoneNumber,
@@ -218,7 +218,7 @@
 // import { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { toast } from 'react-toastify';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 
 // function Signup({ baseUrl = 'http://localhost:5000' }) {
 //   const [formData, setFormData] = useState({
@@ -266,7 +266,7 @@
 //       return;
 //     }
 //     try {
-//       await axios.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
+//       await axiosInstance.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
 //       setOtpSent(true);
 //       toast.success('OTP sent to your email!');
 //     } catch (error) {
@@ -281,7 +281,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.post(`${baseUrl}/api/auth/signup`, {
+//       const response = await axiosInstance.post(`${baseUrl}/api/auth/signup`, {
 //         username: formData.username,
 //         email: formData.email,
 //         phoneNumber: formData.phoneNumber,
@@ -464,7 +464,7 @@
 // import { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { toast } from 'react-toastify';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 
 // function Signup({ baseUrl = 'http://localhost:5000' }) {
 //   const [formData, setFormData] = useState({
@@ -512,7 +512,7 @@
 //       return;
 //     }
 //     try {
-//       await axios.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
+//       await axiosInstance.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
 //       setOtpSent(true);
 //       toast.success('OTP sent to your email!');
 //     } catch (error) {
@@ -527,7 +527,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.post(`${baseUrl}/api/auth/signup`, {
+//       const response = await axiosInstance.post(`${baseUrl}/api/auth/signup`, {
 //         username: formData.username,
 //         email: formData.email,
 //         phoneNumber: formData.phoneNumber,
@@ -694,7 +694,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import Tilt from 'react-parallax-tilt';
 
@@ -746,7 +746,7 @@ function Signup({ baseUrl = 'http://localhost:5000' }) {
       return;
     }
     try {
-      await axios.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
+      await axiosInstance.post(`${baseUrl}/api/auth/send-otp`, { email: formData.email });
       setOtpSent(true);
       toast.success('OTP sent to your email!');
     } catch (error) {
@@ -761,7 +761,7 @@ function Signup({ baseUrl = 'http://localhost:5000' }) {
       return;
     }
     try {
-      const response = await axios.post(`${baseUrl}/api/auth/signup`, {
+      const response = await axiosInstance.post(`${baseUrl}/api/auth/signup`, {
         username: formData.username,
         email: formData.email,
         phoneNumber: formData.phoneNumber,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import Lottie from 'lottie-react';
 import mascot from '../assets/mascot.json';
@@ -72,7 +72,7 @@ function ResetPassword({ baseUrl }) {
     setIsLoading(true);
 
     try {
-      await axios.post(`${baseUrl}/api/auth/reset-password`, {
+      await axiosInstance.post('/api/auth/reset-password', {
         email,
         otp,
         newPassword: formData.newPassword

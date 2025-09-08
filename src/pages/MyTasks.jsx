@@ -1,7 +1,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //     FireIcon,
@@ -29,7 +29,7 @@
 //             try {
 //                 const token = localStorage.getItem('token');
 //                 if (!token) throw new Error('No token found');
-//                 const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
+//                 const response = await axiosInstance.get(`${baseUrl}/api/tasks/assigned`, {
 //                     headers: { Authorization: `Bearer ${token}` },
 //                 });
 //                 setTasks(response.data);
@@ -278,7 +278,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //   FireIcon,
@@ -304,7 +304,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
-//         const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/assigned`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setTasks(response.data);
@@ -494,13 +494,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import { FunnelIcon, AdjustmentsVerticalIcon} from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion'; // <-- Add to imports
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
+import { formatDate, formatDateTime, isOverdue } from '../utils/dateUtils';
 import { downloadTaskExcel } from '../utils/downloadExcel';
 import TaskFilterMenu from '../components/TaskFilterMenu';
 import TaskSortMenu from '../components/TaskSortMenu';
@@ -519,7 +520,7 @@ function MyTasks({ baseUrl }) {
       try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found');
-        const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
+        const response = await axiosInstance.get(`${baseUrl}/api/tasks/assigned`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -529,7 +530,7 @@ function MyTasks({ baseUrl }) {
         //   parsed: new Date(t.last_updated_at),
         // })));
 
-        const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+        const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(usersResponse.data);

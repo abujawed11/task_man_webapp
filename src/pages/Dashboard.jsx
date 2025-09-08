@@ -90,7 +90,7 @@
 // import { useContext, useEffect, useState } from 'react';
 // import { NavLink } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //   UserIcon,
@@ -127,7 +127,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         const headers = { Authorization: `Bearer ${token}` };
-//         const response = await axios.get(`${baseUrl}/api/tasks/dashboard`, { headers });
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/dashboard`, { headers });
         
 //         // setOther(response.data.stats[0])
 //         setStats(response.data.stats);
@@ -263,7 +263,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import {
   UserIcon,
@@ -273,6 +273,7 @@ import {
   CheckCircleIcon,
   
 } from '@heroicons/react/24/solid';
+
 
 import {
   Chart as ChartJS,
@@ -285,6 +286,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Tilt from 'react-parallax-tilt';
+import DateDebugger from '../components/DateDebugger';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
@@ -303,7 +305,7 @@ function Dashboard({ baseUrl }) {
       try {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.get(`${baseUrl}/api/tasks/dashboard`, { headers });
+        const response = await axiosInstance.get(`${baseUrl}/api/tasks/dashboard`, { headers });
         setStats(response.data.stats);
       } catch (error) {
         toast.error('Failed to load dashboard data');
@@ -376,6 +378,13 @@ function Dashboard({ baseUrl }) {
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       
       {/* <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400/20 rounded-full animate-pulse-slow opacity-50"></div> */}
+{/* <DateDebugger sampleDate="2025-09-08 15:16:47" /> */}
+ {/* {tasks && tasks.length > 0 && (
+    <DateDebugger
+      realTaskData={tasks[0]}
+      sampleDate={tasks[0]?.created_at || '2024-01-15T14:30:00.000Z'}
+    />
+  )} */}
 
       <div className="max-w-7xl mx-auto relative z-10">
         <section className="bg-yellow-100 p-6 rounded-lg shadow-md mb-8 text-center relative animate-pulse-bg">

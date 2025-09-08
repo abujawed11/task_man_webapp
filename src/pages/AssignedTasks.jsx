@@ -15,7 +15,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //     FireIcon,
@@ -43,10 +43,10 @@
 //             try {
 //                 const token = localStorage.getItem('token');
 //                 if (!token) throw new Error('No token found');
-//                 // const response = await axios.get(`${baseUrl}/api/tasks/assigned`, {
+//                 // const response = await axiosInstance.get(`${baseUrl}/api/tasks/assigned`, {
 //                 //     headers: { Authorization: `Bearer ${token}` },
 //                 // });
-//                 const response = await axios.get(`${baseUrl}/api/tasks/created-by-me`, {
+//                 const response = await axiosInstance.get(`${baseUrl}/api/tasks/created-by-me`, {
 //                     headers: { Authorization: `Bearer ${token}` },
 //                 });
 //                 setTasks(response.data);
@@ -266,7 +266,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 // import TaskCard from '../components/TaskCard';
@@ -282,7 +282,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
-//         const response = await axios.get(`${baseUrl}/api/tasks/created-by-me`, {
+//         const response = await axiosInstance.get(`${baseUrl}/api/tasks/created-by-me`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setTasks(response.data);
@@ -347,13 +347,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import { FunnelIcon, AdjustmentsVerticalIcon } from '@heroicons/react/24/solid';
 import Tilt from 'react-parallax-tilt';
 import TaskCard from '../components/TaskCard';
 import { downloadTaskExcel } from '../utils/downloadExcel';
+import DateDebugger from '../components/DateDebugger';
 
 //imports for filter
 import TaskFilterMenu from '../components/TaskFilterMenu';
@@ -396,12 +397,12 @@ function AssignedTasks({ baseUrl }) {
       try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found');
-        const response = await axios.get(`${baseUrl}/api/tasks/created-by-me`, {
+        const response = await axiosInstance.get(`${baseUrl}/api/tasks/created-by-me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         //For Filter users
-        const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+        const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(usersResponse.data);
@@ -429,6 +430,16 @@ function AssignedTasks({ baseUrl }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-yellow-100 to-white py-10 px-4">
+
+
+      {/* {tasks && tasks.length > 0 && (
+        <DateDebugger
+          realTaskData={tasks.find(t => t.task_id === 'TASK0026')}
+          sampleDate={tasks[0].created_at}
+        />
+      )} */}
+
+
       <div className="flex items-center mb-6">
         <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2}>
           <button

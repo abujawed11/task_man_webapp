@@ -1,5 +1,5 @@
 // import { useEffect, useState } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { useParams, useLocation, useNavigate } from 'react-router-dom';
 // import { DocumentIcon, PlayIcon, UserIcon, CalendarIcon } from '@heroicons/react/24/outline';
 // import TaskUpdateCard from '../components/TaskUpdateCard';
@@ -20,7 +20,7 @@
 //     const fetchUpdates = async () => {
 //       const token = localStorage.getItem('token');
 //       try {
-//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+//         const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         // setUpdates(res.data);
@@ -128,7 +128,7 @@
 
 
 // import { useEffect, useState } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { useParams, useLocation, useNavigate } from 'react-router-dom';
 // import { DocumentIcon, UserIcon, CalendarIcon } from '@heroicons/react/24/outline';
 // import TaskUpdateCard from '../components/TaskUpdateCard'; // 👈 your custom card
@@ -145,7 +145,7 @@
 //     const fetchUpdates = async () => {
 //       const token = localStorage.getItem('token');
 //       try {
-//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+//         const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUpdates(res.data.updates || []);
@@ -219,7 +219,7 @@
 
 
 // import { useEffect, useState } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { useParams, useLocation, useNavigate } from 'react-router-dom';
 // import {
 //   ArrowLeftIcon,
@@ -244,7 +244,7 @@
 //     const fetchUpdates = async () => {
 //       const token = localStorage.getItem('token');
 //       try {
-//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+//         const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUpdates(res.data.updates || []);
@@ -374,7 +374,7 @@
 
 
 // import { useEffect, useState } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { useParams, useLocation, useNavigate } from 'react-router-dom';
 // import {
 //   ArrowLeftIcon,
@@ -399,7 +399,7 @@
 //     const fetchUpdates = async () => {
 //       const token = localStorage.getItem('token');
 //       try {
-//         const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+//         const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUpdates(res.data.updates || []);
@@ -529,7 +529,7 @@
 // export default TaskProgress;
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowLeftIcon,
@@ -555,7 +555,7 @@ function TaskProgress({ baseUrl }) {
     const fetchUpdates = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
+        const res = await axiosInstance.get(`${baseUrl}/api/tasks/${taskId}/progress`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUpdates(res.data.updates || []);

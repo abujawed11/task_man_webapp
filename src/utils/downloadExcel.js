@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 export const downloadTaskExcel = async ({ baseUrl, mode, username }) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/tasks/export`, {
+    const response = await axiosInstance.get(`${baseUrl}/api/tasks/export`, {
       params: { mode, username },
       responseType: 'blob',
     });

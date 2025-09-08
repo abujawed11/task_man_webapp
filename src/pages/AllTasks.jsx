@@ -1,7 +1,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate, NavLink } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //   FireIcon,
@@ -50,7 +50,7 @@
 //         if (!token) throw new Error('No token found');
 
 //         // Fetch all tasks
-//         const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
+//         const tasksResponse = await axiosInstance.get(`${baseUrl}/api/tasks/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setTasks(tasksResponse.data);
@@ -59,7 +59,7 @@
 //         // console.log("filter:---->",filteredTasks)
 
 //         // Fetch users for filters
-//         const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+//         const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(usersResponse.data);
@@ -500,7 +500,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import { DocumentArrowDownIcon, FunnelIcon } from '@heroicons/react/24/solid';
 // import TaskCard from '../components/TaskCard'; // ✅ import your TaskCard
@@ -528,13 +528,13 @@
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
 
-//         const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
+//         const tasksResponse = await axiosInstance.get(`${baseUrl}/api/tasks/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setTasks(tasksResponse.data);
 //         setFilteredTasks(tasksResponse.data);
 
-//         const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+//         const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(usersResponse.data);
@@ -721,7 +721,7 @@
 // import { useState, useEffect, useContext } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../context/AuthContext';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 // import { toast } from 'react-toastify';
 // import {
 //   DocumentArrowDownIcon,
@@ -762,7 +762,7 @@
 //         const token = localStorage.getItem('token');
 //         if (!token) throw new Error('No token found');
 
-//         const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
+//         const tasksResponse = await axiosInstance.get(`${baseUrl}/api/tasks/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 
@@ -772,7 +772,7 @@
 //         setTasks(tasksResponse.data);
 //         setFilteredTasks(tasksResponse.data);
 
-//         const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+//         const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(usersResponse.data);
@@ -1087,7 +1087,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { toast } from 'react-toastify';
 import {
   DocumentArrowDownIcon,
@@ -1130,7 +1130,7 @@ function AllTasks({ baseUrl }) {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const tasksResponse = await axios.get(`${baseUrl}/api/tasks/all`, {
+        const tasksResponse = await axiosInstance.get(`${baseUrl}/api/tasks/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -1139,7 +1139,7 @@ function AllTasks({ baseUrl }) {
         setTasks(tasksResponse.data);
         setFilteredTasks(tasksResponse.data);
 
-        const usersResponse = await axios.get(`${baseUrl}/api/tasks/users/all`, {
+        const usersResponse = await axiosInstance.get(`${baseUrl}/api/tasks/users/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(usersResponse.data);
@@ -1272,7 +1272,7 @@ function AllTasks({ baseUrl }) {
   // const handleDownload = async (mode, username) => {
   //   console.log(mode, username)
   //   try {
-  //     const response = await axios.get(`${baseUrl}/api/tasks/export`, {
+  //     const response = await axiosInstance.get(`${baseUrl}/api/tasks/export`, {
   //       params: { mode, username },
   //       responseType: 'blob',
   //     });

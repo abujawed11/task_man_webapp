@@ -3,7 +3,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { Eye, EyeOff } from 'lucide-react';
 import Lottie from 'lottie-react';
 import mascot from '../assets/mascot.json';
@@ -50,7 +50,7 @@ function Login({ baseUrl }) {
     }
 
     try {
-      const response = await axios.post(`${baseUrl}/api/auth/login`, {
+      const response = await axiosInstance.post('/api/auth/login', {
         username: formData.username,
         password: formData.password,
       });

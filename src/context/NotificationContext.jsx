@@ -1,6 +1,6 @@
 // // src/context/NotificationContext.jsx
 // import { createContext, useEffect, useState } from 'react';
-// import axios from 'axios';
+// import axiosInstance from '../utils/axios';
 
 // export const NotificationContext = createContext();
 
@@ -12,7 +12,7 @@
 //     const token = localStorage.getItem('token');
 //     console.log("fetched")
 //     try {
-//       const res = await axios.get(`${baseUrl}/api/notifications`, {
+//       const res = await axiosInstance.get(`${baseUrl}/api/notifications`, {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       console.log(res.data)
@@ -40,7 +40,7 @@
 
 import { createContext, useEffect, useState, useContext } from 'react';
 import { AuthContext } from './AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 export const NotificationContext = createContext();
 
@@ -52,7 +52,7 @@ export const NotificationProvider = ({ children, baseUrl }) => {
   const fetchNotifications = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`${baseUrl}/api/notifications`, {
+      const res = await axiosInstance.get(`${baseUrl}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // console.log(res.data)
@@ -66,7 +66,7 @@ export const NotificationProvider = ({ children, baseUrl }) => {
   const markAsRead = async (notificationId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.post(
+      await axiosInstance.post(
         `${baseUrl}/api/notifications/mark-read`,
         { notificationId },  // ✅ send notificationId in body
         {
