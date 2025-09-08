@@ -51,6 +51,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import MyTasks from './pages/MyTasks';
 import AssignedTasks from './pages/AssignedTasks';
@@ -106,6 +108,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup baseUrl={baseUrl} />} />
           <Route path="/login" element={<Login baseUrl={baseUrl} />} />
+          <Route path="/forgot-password" element={<ForgotPassword baseUrl={baseUrl} />} />
+          <Route path="/reset-password" element={<ResetPassword baseUrl={baseUrl} />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/create" element={<ProtectedRoute><CreateTask baseUrl={baseUrl} /></ProtectedRoute>} />
           <Route path="/tasks/my-tasks" element={<ProtectedRoute><MyTasks baseUrl={baseUrl} /></ProtectedRoute>} />
